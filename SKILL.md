@@ -133,12 +133,12 @@ later. Research procedure:
 
 1. **Start from what the user gave** (docs URLs, files, MCP doc tools). If they
    gave only a topic, ask where the trusted sources live — do NOT substitute
-   web search for authoritative topics (internal systems, products, APIs).
-   If the user confirms no trusted sources exist AND explicitly opts in to
-   web-researched provenance, go to **Phase 1R** instead of stalling here.
-   If they hand over an already-researched write-up, treat it as the raw
-   source: still run step 3 (verbatim extraction) and step 4 (coverage check)
-   on it, then continue from "Then author" below.
+   web search for authoritative topics (internal systems, products, APIs),
+   regardless of opt-in. If the user has only a topic and granted public-web
+   Deep Research permission in the Phase 0 intake, go to **Phase 1R** below
+   instead of stalling here. If they hand over an already-researched write-up,
+   treat it as the raw source: still run step 3 (verbatim extraction) and
+   step 4 (coverage check) on it, then continue from "Then author" below.
 2. **Drill, don't skim.** Index/landing pages give marketing-level text; the
    flows, stage names, file formats, and platform names live in sub-pages.
    From each landing page, list its sub-page links and fetch the ones matching
@@ -153,58 +153,70 @@ later. Research procedure:
    If the sources genuinely don't cover something the user asked for, say so
    and ask — don't fill with plausible content.
 
-### Phase 1R — No sources? Research the topic in NotebookLM
+### Phase 1R — Topic-only: multi-pass research in Gemini Notebook
 
-Trigger: the user has only a topic, has confirmed no trusted sources exist,
-and has explicitly opted in to web-researched provenance. This path is never
-used for authoritative-doc topics (internal systems, products, APIs) — that
-rule stands regardless of opt-in.
+Trigger: the user has only a topic and granted public-web Deep Research permission in the Phase 0 intake.
 
-Mechanism (UI terminology frozen, verified 2026-08-12): in NotebookLM, open
-the **Sources** panel → add source → **Web** → enter the topic/question →
-choose **Deep Research** (preferred: runs in the **background** for minutes
-and produces a cited **Deep Research Report** importable together with the
-sources it found; some found sources may be **paywall**ed or otherwise
-unusable — that's normal, keep the usable ones). If Deep Research isn't
-available on the account/UI, fall back to **Fast Research** (the quicker
-"Discover sources"-style suggested-source import) and lean on the imported
-sources instead of a report.
+1. Write `research_brief.md` from the intake BEFORE any research pass — required headings are frozen in `references/research-quality.md` (`## research_brief.md`). Never send a bare topic (e.g. "singularity") to Deep Research.
+2. Run the multi-pass protocol per `## Multi-pass Deep Research protocol` in `references/notebooklm-research.md`: Pass A (landscape) and Pass B (adversarial) always; Pass C (weak signals / editorial lens) when the chosen approach calls for it; Pass D (gap closure) only after the evidence matrix exists. Record each pass (query, timestamps, fallback) in `run_manifest.json` `research_passes`.
+3. Before closing ANY Deep Research result view: capture the report text, citation mapping, and the complete result inventory; default to **Import all results**; record omissions — per `## Preserve results before closing` in `references/notebooklm-research.md`. Save each pass's full report locally, one file per pass, its path recorded in the manifest's `artifacts`.
+4. Curate into `source_registry.md` and `evidence_matrix.md` per `references/research-quality.md` (schemas live there). Hard rule, verbatim: "No central claim may enter `notebooklm_source.md` without an evidence-matrix entry."
+5. Run `python scripts/validate_evidence.py <run-dir>` after curation — ERRORs block progress; WARNs are fixed or explained in `research_checkpoint.md`. Run it AGAIN after `notebooklm_source.md` and any chart data files exist (the uncited-number and chart checks need them).
+6. THE AGENT writes the synthesis: Deep Research reports are discovery leads, source summaries are orientation, Chat with selected sources is for evidence extraction, Studio Reports are an optional second opinion — per `## Synthesis surfaces` in `references/notebooklm-research.md`. NotebookLM never silently chooses the thesis.
+7. Write `research_checkpoint.md` (headings frozen in `references/research-quality.md`) and continue automatically on a go verdict — no user checkpoint (see "Automatic continuation and escalation" above).
 
-**Manual gate (default):** the user runs the research in NotebookLM, imports
-the report plus the usable sources into the notebook, and hands the report
-text back (paste or download); save it locally as `research_report.md`.
+Mechanism: **manual gate** (default) — the user runs the research in the notebook and hands results back; **auto mode** — drive the UI per the recipe and adapter in `references/notebooklm-research.md`. Nothing else about the UI belongs here.
 
-**Auto mode (Chrome):** same posture as Phase 2's auto mode — drive the
-**Sources** panel → **Web** → enter the query → select **Deep Research** →
-poll for completion (minutes; wait+screenshot) → import the report and
-sources → capture the report text (e.g. get_page_text) into
-`research_report.md`. NotebookLM's UI churns — if elements moved or steps
-404, fall back to the manual gate rather than fighting it.
+Provenance: `notebooklm_source.md` carries a note that its content is web-researched via Gemini Notebook (formerly NotebookLM) Deep Research as of the run's as-of date, NOT verified against authoritative docs; the same disclosure is repeated in Phase 6.
 
-Fact Gate integration: `research_report.md` is RAW source material, not
-trusted narrative — run Phase 1 **step 3** (verbatim extraction) and
-**step 4** (coverage check) on it before authoring `notebooklm_source.md`.
-Gaps → research again or drop the topic; never fill from memory.
-
-Provenance: `notebooklm_source.md` gets a provenance note stating the
-content is web-researched via NotebookLM Deep Research on <date>, not
-verified against authoritative docs; repeat the disclosure in the Phase 6
-deliverables conversation.
-
-Notebook reuse: do the research in the **same notebook** later used for
-slide generation — the report and imported sources stay as notebook
-sources; the two authored .md files are still uploaded, and the pasted
-outline remains the control lever.
+Notebook reuse: this research happens in the SAME notebook later used for slide generation.
 
 Then author:
-- `notebooklm_source.md`: full narrative — why it matters, actors, flows stage by
-  stage, how parts connect, takeaway. This is the fact anchor for every later step.
-- `slide_division.md`: N slides (let content decide N; 10–15 typical). Per slide:
+- `notebooklm_source.md`: full narrative (why it matters, actors, flows, how
+  parts connect, takeaway) — on a research run, built ONLY from claims with
+  evidence-matrix rows; central claims carry their compact source IDs (e.g.
+  [S03]).
+- `slide_division.md`: N slides (let content decide N; 10–15 typical). Per
+  slide:
   - **Data**: exactly what appears on the slide
-  - **Visual**: one paragraph, usable directly as an image prompt. Mark diagram-type
-    slides with **DIAGRAM** (flow/architecture) vs illustration slides.
+  - **Visual**: one paragraph, usable directly as an image prompt. Visual
+    categories are **DIAGRAM** (flow/architecture), **DATA CHART**
+    (quantitative), or illustration.
+  - Each slide lists the compact source IDs backing its claims.
+  - The deck ends with a bibliography slide mapping source IDs to
+    titles/URLs.
 - End slide_division.md with the NotebookLM run notes and the outline-paste prompt
   (see Phase 2 template).
+
+### Report-video mode
+
+Applies when the Phase 0 delivery format is a narrated report video. The slide
+outline follows this twelve-beat structure, in order:
+
+1. Cold open: the central question.
+2. Definition: what would count as the phenomenon?
+3. Measurement dashboard.
+4. Strongest evidence supporting the hypothesis.
+5. Strongest evidence against it.
+6. Non-obvious indicators or the selected special lens.
+7. Bottlenecks and alternative explanations.
+8. Scenarios and forecast ranges.
+9. Calibrated answer as of the stated date.
+10. What would change the conclusion.
+11. What to monitor next.
+12. Methodology and sources.
+
+Narration carries the reasoning; slides show evidence, diagrams, timelines,
+and charts — never paragraphs of report text.
+
+### DATA CHART slides
+
+Quantitative charts are generated deterministically from a local CSV/JSON data
+file in the run dir — never by asking an image generator to draw numbers. The
+data file carries `source_ids` metadata; all seven required fields per chart
+are listed in `## DATA CHART requirements` in `references/research-quality.md`;
+`scripts/validate_evidence.py` machine-checks only the `source_ids` presence —
+the rest is Fact Gate work.
 
 ## Phase 2 — Generate the deck in NotebookLM
 
