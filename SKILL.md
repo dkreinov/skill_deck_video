@@ -234,6 +234,16 @@ For each slide use the matching "Data" and "Visual" descriptions from the
 Slide Division source. Keep text minimal: key message + max 3 bullets per slide.
 ```
 
+### Source isolation (hard gate)
+
+On a research run the notebook also contains raw Deep Research reports,
+imported web sources, and saved notes — not just the two authored docs. For
+slide generation, select ONLY `notebooklm_source.md` and `slide_division.md`
+as sources and EXCLUDE everything else. Explicitly verify the source checkboxes
+before generating — this is a hard gate, do not proceed assuming selection is
+already correct. See `## Source-selection isolation` in
+`references/notebooklm-research.md`.
+
 Two execution modes:
 
 **Manual gate (default):** give the user the upload list (both .md files), the
@@ -249,17 +259,11 @@ then navigate/computer/find/file_upload):
    "Download PowerPoint (.pptx)"
 6. Verify the file actually landed in `~/Downloads` (downloads fail silently;
    re-try via UI once, then stop and hand to user)
-Known failure modes (observed 2026-08):
-- Source upload: no `<input type=file>` exists in the DOM until the native picker
-  opens → use the **Copied text** path instead (find textarea via `find`, set the
-  full document with `form_input`, click Insert). Works reliably; paste each doc
-  as its own source.
-- Export downloads: the click fires the export RPC but Chrome blocks the
-  automation-initiated download — blank `about:blank` tabs pile up and no file
-  lands. THE DOWNLOAD CLICK IS THE USER'S: leave the artifact menu open, tell the
-  user to click the two Download items, and continue once files appear in
-  `~/Downloads`. (Suno has the same issue but offers a CDN fallback:
-  `cdn1.suno.ai/<song-uuid>.mp3`; NotebookLM has no equivalent public URL.)
+Two known failure modes: source upload has no `<input type=file>` until the
+native picker opens (use the Copied-text path instead), and
+automation-initiated export downloads are blocked by Chrome (the download
+click is the user's). Details and current workarounds live in
+`## UI adapter (verified 2026-08-12)` in `references/notebooklm-research.md`.
 Site UIs churn — if any step 404s or elements moved, fall back to the manual gate
 rather than fighting it.
 
@@ -348,6 +352,11 @@ pixel edits.
 - Build: `python scripts/build_narration.py script.md slides_dir out.mp4
   [--voice V] [--lead 0.6] [--tail 1.0]` — per-slide TTS, measured durations size
   each slide's screen time (sync correct by construction), 1080p, concat.
+- On report-video runs (see **Report-video mode** in Phase 1), the narration
+  carries the reasoning of the report — definitions, evidence for and against,
+  calibration — while slides stay visual. The Fact Gate applies unchanged: the
+  spoken text may simplify but never add facts or numbers absent from the
+  source doc.
 
 ## Phase 5 — Music
 
@@ -385,5 +394,14 @@ pixel edits.
 
 - Extract 2–3 frames from the final MP4 and eyeball; confirm audio levels printed.
 - Deliverables table: final.mp4 (+ soft-music variant), narrated.mp4 (no music,
-  fallback), clean.pptx, narration_script.md, the two source docs.
+  fallback), clean.pptx, narration_script.md, the two source docs. On research
+  runs, also list: `run_manifest.json`, `research_brief.md`,
+  `source_registry.md`, `evidence_matrix.md`, `research_checkpoint.md`, the
+  preserved per-pass research reports, and any chart data files.
+- Final QA on research runs: run `python scripts/validate_evidence.py <run-dir>`
+  one last time (must be error-free) and walk the manual items of
+  `## Audit checklist` in `references/research-quality.md`.
+- The deck's bibliography slide must be present, and the web-researched
+  provenance disclosure is repeated to the user in the deliverables
+  conversation.
 - Remind: re-exports from NotebookLM re-add the watermark → rerun Phase 3.
