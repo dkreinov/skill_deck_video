@@ -1,6 +1,6 @@
 # deck-video — a Claude Code skill for fact-checked decks & narrated videos
 
-![deck-video pipeline: sources → fact-checked slides → narrated video](assets/banner.png)
+![deck-video pipeline: topic or sources → fact-checked slides → narrated video](assets/banner.png)
 
 Real output — four slides from the [example run](examples/karpathy-three-months/), generated from public posts and fact-gated:
 
