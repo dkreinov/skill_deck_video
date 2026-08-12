@@ -9,7 +9,7 @@ This skill turns a topic — with or without sources you already trust — into 
 fact-checked slide deck built in **Gemini Notebook (formerly NotebookLM)** and
 a narrated MP4 with music.
 
-Produces, from a topic and trusted sources:
+Produces, from a topic — with or without ready sources:
 - On a topic-only research run (no ready sources, Phase 1R), before the deck:
   `run_manifest.json` — run manifest and artifact ledger; `research_brief.md`
   — intake answers, defaults, and research plan; `source_registry.md` — every
