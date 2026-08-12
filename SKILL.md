@@ -1,0 +1,269 @@
+---
+name: deck-video
+description: Turn a topic + trusted sources into a fact-checked slide deck (via NotebookLM) and a narrated MP4 with music. Use when the user asks for a presentation, explainer deck, or narrated presentation video built from documentation or source material. Covers research→source docs, NotebookLM slide generation (manual gate or Chrome-automated), fact verification of ALL text and visuals, watermark cleanup, TTS narration, and music mixing.
+---
+
+# deck-video — sourced deck + narrated video pipeline
+
+Produces, from a topic and trusted sources:
+1. `notebooklm_source.md` — the full factual narrative (single source of truth)
+2. `slide_division.md` — per-slide Data + Visual spec
+3. A NotebookLM-generated deck (PPTX + PDF), fact-gated and watermark-free
+4. `<name>_narrated.mp4` — narrated video; `<name>_final.mp4` — with music bed
+
+Scripts live in `scripts/` next to this file. Preflight (once per machine):
+`pip install pymupdf opencv-python numpy edge-tts imageio-ffmpeg`
+(ffmpeg itself ships with imageio-ffmpeg — no separate install). Auto mode
+additionally needs the claude-in-chrome extension connected and the user logged
+into NotebookLM in that Chrome; music generation needs a logged-in Suno account
+(optional — see Phase 5 fallback).
+
+## Non-negotiable: the Fact Gate
+
+Everything shown or spoken must trace to the source documents. Enforce at three points:
+
+1. **While writing** `notebooklm_source.md`: every claim comes from a fetched source
+   (docs site, user-provided files). No remembered "facts". Numbers, stage names,
+   orderings, file formats — verbatim from sources.
+2. **Slide review** (after any generation): render every slide to PNG
+   (`render_review.py`) and check EACH slide against `notebooklm_source.md`:
+   - every number on the slide exists in the source doc (**no-unsourced-numbers rule**
+     — generators love inventing "85% faster / 10X" stopwatches; kill on sight)
+   - names, stage orders, file names, platform names exactly right
+   - **text rendered inside images** — AI image renderers garble words
+     ("Laisnry Budget") and produce invalid data (non-hex "0xAT"); zoom and read it all
+   - slides claiming two things are "equal/identical" must show identical values
+   - imagery must not depict recognizable third-party brands (a "generic car" often
+     renders as a Tesla)
+   - phrasing that inverts meaning ("if degradation fails")
+   Produce a verdict table (slide | claim | source line | pass/fix). Fix via
+   NotebookLM Revise, re-export, re-review changed slides. Iterate until all pass.
+   Prefer a fresh-eyes subagent for this pass — the author of slide_division.md is
+   blind to their own hand-waves.
+3. **Narration script**: same rule — the spoken text may simplify but never add
+   facts/numbers absent from the source doc.
+
+## Phase 0 — Brief (one question round, before any work)
+
+Slide *content* is protected by the Fact Gate; slide *framing* is protected
+here. Ask ONE batched round (AskUserQuestion) covering, at minimum:
+- **Audience & takeaway**: who sees this, and what should they know/decide
+  afterwards? (Drives tone, depth, and what the Takeaway slide claims.)
+- **Delivery mode**: presented live (Presenter format, minimal text), sent
+  around (Detailed Deck), or the narrated video as the primary artifact?
+- **Scope**: rough slide count / video length, must-cover items, must-NOT-cover
+  items (confidential internals, unreleased work).
+Accept "your call" as an answer and proceed with stated defaults (mixed
+technical audience, presenter style, 10–15 slides, ~5–7 min video). Do not
+re-litigate these choices later without new information.
+
+For high-stakes decks (execs, external audiences, decision meetings): if a
+grill-me-style interrogation skill is available in the session, offer to run it
+instead of the mini-brief — but never depend on it; this phase is
+self-contained.
+
+## Phase 1 — Research & author the two docs
+
+The Fact Gate is only as strong as this phase — every later verification checks
+slides *against the source doc*, so what isn't captured here can't be verified
+later. Research procedure:
+
+1. **Start from what the user gave** (docs URLs, files, MCP doc tools). If they
+   gave only a topic, ask where the trusted sources live — do NOT substitute
+   web search for authoritative topics (internal systems, products, APIs).
+   If they hand over an already-researched write-up, treat it as the raw
+   source: still run step 3 (verbatim extraction) and step 4 (coverage check)
+   on it, then continue from "Then author" below.
+2. **Drill, don't skim.** Index/landing pages give marketing-level text; the
+   flows, stage names, file formats, and platform names live in sub-pages.
+   From each landing page, list its sub-page links and fetch the ones matching
+   the deck's spine (getting-started / flow / architecture / high-level design).
+   Two levels deep is the norm, one fetch is never enough.
+3. **Extract verbatim, not paraphrased**: exact stage names and their order,
+   tool/command names, file names and formats, platform/version names, and any
+   number you might want on a slide (with its source location). Distinguish
+   "the doc says X" from "I inferred X" — inferences don't go in the source doc.
+4. **Coverage check before writing**: for each planned slide topic, can you
+   point at a fetched source for it? Gaps → fetch more or drop the topic.
+   If the sources genuinely don't cover something the user asked for, say so
+   and ask — don't fill with plausible content.
+
+Then author:
+- `notebooklm_source.md`: full narrative — why it matters, actors, flows stage by
+  stage, how parts connect, takeaway. This is the fact anchor for every later step.
+- `slide_division.md`: N slides (let content decide N; 10–15 typical). Per slide:
+  - **Data**: exactly what appears on the slide
+  - **Visual**: one paragraph, usable directly as an image prompt. Mark diagram-type
+    slides with **DIAGRAM** (flow/architecture) vs illustration slides.
+- End slide_division.md with the NotebookLM run notes and the outline-paste prompt
+  (see Phase 2 template).
+
+## Phase 2 — Generate the deck in NotebookLM
+
+The single biggest control lever: **paste the outline verbatim into the prompt box**
+(NotebookLM follows a pasted outline near-1:1; referencing an uploaded source is weaker).
+
+Settings: Studio → Slide Deck → Format **Presenter Slides**, Length **Default**.
+Prompt template:
+
+```
+Audience: <who>. Create exactly <N> slides. Use this outline EXACTLY — same order,
+same titles, one slide each:
+1. <title> ... N. <title>
+For each slide use the matching "Data" and "Visual" descriptions from the
+Slide Division source. Keep text minimal: key message + max 3 bullets per slide.
+```
+
+Two execution modes:
+
+**Manual gate (default):** give the user the upload list (both .md files), the
+settings, and the prompt. They generate, optionally Revise, and export PPTX + PDF.
+
+**Auto mode (Chrome):** with claude-in-chrome tools (`tabs_context_mcp` first,
+then navigate/computer/find/file_upload):
+1. notebooklm.google.com → Create new notebook
+2. Upload both .md files as sources (file_upload; if .md rejected, rename .txt)
+3. Studio panel → Slide Deck → open customization → set Format/Length → paste prompt
+4. Generate (60s–10min; poll with wait+screenshot)
+5. Three-dot menu on the artifact → "Download PDF Document (.pdf)" and
+   "Download PowerPoint (.pptx)"
+6. Verify the file actually landed in `~/Downloads` (downloads fail silently;
+   re-try via UI once, then stop and hand to user)
+Known failure modes (observed 2026-08):
+- Source upload: no `<input type=file>` exists in the DOM until the native picker
+  opens → use the **Copied text** path instead (find textarea via `find`, set the
+  full document with `form_input`, click Insert). Works reliably; paste each doc
+  as its own source.
+- Export downloads: the click fires the export RPC but Chrome blocks the
+  automation-initiated download — blank `about:blank` tabs pile up and no file
+  lands. THE DOWNLOAD CLICK IS THE USER'S: leave the artifact menu open, tell the
+  user to click the two Download items, and continue once files appear in
+  `~/Downloads`. (Suno has the same issue but offers a CDN fallback:
+  `cdn1.suno.ai/<song-uuid>.mp3`; NotebookLM has no equivalent public URL.)
+Site UIs churn — if any step 404s or elements moved, fall back to the manual gate
+rather than fighting it.
+
+**Audit-first order (auto mode): review → revise → capture. Fully automatic.**
+Do NOT download after generation. Open the artifact's expanded viewer (⤢ icon),
+walk every slide via the right-hand thumbnails (click thumb → screenshot → zoom
+where text is small), and run the full Fact Gate on the screenshots — no files
+needed. Then click **Revise**, select each failing slide, enter its instruction
+(form_input on the "Revision instructions" textbox), let them batch under
+"Pending changes", and **Generate revised deck**. Re-audit the changed slides.
+
+**Native-resolution capture (replaces the download entirely):** the slide PNGs
+live on auth-gated lh3.googleusercontent URLs (session-cookie-only; curl gets a
+login page, canvas export is CORS-tainted). But they render in-page at native
+1376×768 — so extract them via the screenshot pipeline:
+1. In the expanded viewer, scroll the thumbnail rail fully (forces lazy-load),
+   then collect srcs in DOM order via javascript_tool:
+   `[...document.querySelectorAll('img[src*="lh3.googleusercontent.com/notebooklm"]')].map(i=>i.src)`
+2. **Measure the buffer scale first — this is the whole trick.** The `zoom`
+   region is in SCREENSHOT-BUFFER pixels, NOT CSS pixels, and the buffer is the
+   viewport downscaled to a **1568px-wide cap**. Take one plain `screenshot`,
+   read its width `SW`, read `innerWidth` via javascript_tool, and compute
+   `S = SW / innerWidth`. On a maximized 1920×855 window S = 0.8167 and the
+   buffer is only ~698 rows tall — **less than a slide's 768**, which is why the
+   naive region [0,0,1376,768] fails with "Region exceeds viewport boundaries".
+   Do not trust `resize_window` to fix this: Chrome silently ignores resizes
+   while a window is maximized, and `innerWidth` stays pinned.
+3. Inject a fixed overlay `<img>` at top-left with a **magenta** full-page
+   backdrop (`#ff00ff`, z-index max) so backdrop bleed is detectable later.
+   Size the overlay in CSS px so it lands at native size in the buffer:
+   `W_css = 1376 / S`, `H_css = 768 / S` (≈1685×940 at S=0.8167). Set its src
+   per slide (`await img.decode()` +250ms).
+4. Because `H_css` exceeds the viewport, capture each slide in **two vertical
+   passes** and stitch:
+   - pass A: overlay `top: 0px`      → `zoom` region [0, 0, 1376, 690]
+   - pass B: overlay `top: -96px`    → `zoom` region [0, 0, 1376, 690]
+   96 CSS px ≈ 78 buffer px of shift, so pass B covers slide rows ~78..768.
+   Use `save_to_disk: true`; save as `slide_NN_A.png` / `slide_NN_B.png`.
+   Batch the four actions (js, zoom, js, zoom) per slide with `browser_batch` —
+   larger batches time out. Remove the overlay afterwards.
+5. Stitch with `python scripts/stitch_slides.py captures_dir slides_dir`. It
+   resizes each capture back to the true region size, recovers the vertical
+   offset by cross-correlating the overlap (do NOT trust the arithmetic — zoom
+   resamples its output), and writes exact 1376×768 PNGs. It also replaces any
+   edge row/column still showing the magenta backdrop; expect `edge_rows=1`,
+   which is sub-pixel rounding, not a bug. Sanity check: reported offset should
+   be identical across all slides and overlap error < ~4/255.
+6. Inpaint the watermark with
+   `python scripts/clean_watermark_png.py slides_dir slides_clean`, then build
+   the PPTX with `python scripts/build_pptx.py out.pptx slides_clean/` — it
+   assembles a valid deck for any number of images from the bundled
+   `deck_template.zip` (no donor file or third-party libs needed).
+
+If the Chrome window is minimized, `innerWidth/innerHeight` read 0 and
+`visibilityState` is `hidden`; screenshots fail with a clip-deserialization or
+host-permission error. JavaScript still runs, so this is easy to misdiagnose —
+check those two values before assuming the page is broken, and ask the user to
+restore the window.
+Then CONTINUE WITHOUT PAUSING into Phase 4 (narration) and Phase 5 (music) —
+the deliverable of auto mode is the narrated+music MP4 plus the rebuilt PPTX,
+not a deck the user still has to process. The NotebookLM Download buttons
+remain available to the user for an "official" export, but nothing depends on
+them.
+
+Export reality (as of 2026-08): slides come back as one full-bleed PNG per slide —
+no editable text boxes. All fixes go through NotebookLM Revise + re-export, or
+pixel edits.
+
+## Phase 3 — Clean
+
+- `python scripts/clean_watermark.py in.pptx out_clean.pptx` — inpaints the
+  bottom-right "Gemini Notebook" stamp on every slide image locally (never upload
+  internal decks to third-party watermark sites). Then run render_review.py on
+  the output and zoom the bottom-right corner of photo-heavy slides to check for
+  inpaint smudges.
+
+## Phase 4 — Narrate
+
+- Write `narration_script.md`: one `## Slide N — <title>` block per slide.
+  Spoken register: full sentences, transitions between slides, spell out technical
+  tokens ("network dot json"), ~2–3 sentences (~20–30s) per slide. Fact Gate applies.
+- Voice: edge-tts neural voices; default `en-US-AndrewMultilingualNeural` at rate -4%.
+  Offer samples: `python scripts/build_narration.py --samples narration_script.md`
+  writes one test line in Andrew/Ava/Brian for the user to audition. Only script
+  text leaves the machine.
+- Build: `python scripts/build_narration.py script.md slides_dir out.mp4
+  [--voice V] [--lead 0.6] [--tail 1.0]` — per-slide TTS, measured durations size
+  each slide's screen time (sync correct by construction), 1080p, concat.
+
+## Phase 5 — Music
+
+- Source, in preference order: (a) a track the user provides or names;
+  (b) generate with Suno via Chrome (requires the user's logged-in Suno
+  account); (c) if neither is available, deliver the narrated-only MP4 as the
+  final output and tell the user music can be mixed in later with mix_music.py —
+  never source music from random royalty-free sites without asking.
+  Suno flow:
+  suno.com/create → Simple mode → **check the model selector before generating**
+  (top-right of the compose panel). It defaults to whatever was last used and is
+  often an older tier; open it and pick the newest the account has — v5.5 Pro
+  needs a subscription, so confirm rather than assume, and check the badges on
+  existing library tracks to see which tiers the account can actually produce.
+  Then toggle **Instrumental** → prompt like
+  "Calm minimal ambient electronic underscore for a technology presentation. Warm
+  analog synth pads, soft slow pulsing arpeggio, no drums, no vocals, instrumental
+  only, 85 BPM" → Create (produces 2 variants, ~1–2 min).
+  Download fallback (menus fail silently): read the row's `/song/<uuid>` link and
+  fetch `https://cdn1.suno.ai/<uuid>.mp3` directly.
+- Pick between variants objectively: `python scripts/mix_music.py --analyze a.mp3 b.mp3`
+  → lower loudness-stddev (steadier) and longer duration win for a background bed.
+- Mix: `python scripts/mix_music.py video.mp4 music.mp3 out.mp4 --bed-db -25`
+  — auto-gains music to the target bed level, lowpass 10k, fade in/out, video
+  stream copied untouched. Produce TWO versions by default: `--bed-db -25`
+  (present; survives laptop speakers) and `--bed-db -35` (subtle) — users
+  reliably ask for the other one.
+- Verify: the script prints speech-region levels (peaks should sit at least
+  10 dB above the bed). To also verify the bed level itself, pass
+  `--gap-ss <t>` with a timestamp of a known music-only moment — e.g. a slide
+  boundary: end of slide 1 = lead + slide-1 narration duration + a bit of tail
+  (build_narration prints per-slide durations).
+
+## Phase 6 — QA & deliver
+
+- Extract 2–3 frames from the final MP4 and eyeball; confirm audio levels printed.
+- Deliverables table: final.mp4 (+ soft-music variant), narrated.mp4 (no music,
+  fallback), clean.pptx, narration_script.md, the two source docs.
+- Remind: re-exports from NotebookLM re-add the watermark → rerun Phase 3.
