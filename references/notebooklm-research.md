@@ -199,3 +199,16 @@ assumption that the right sources are already selected.
   click to them.
 - If elements have moved or a step 404s, fall back to the manual gate rather
   than fighting the UI.
+
+## UI-drift smoke test
+
+Before an auto-mode run, walk this checklist (manually or via the browser tools); it verifies Google's UI still matches the recipes above. Record the date walked and any failing item in `run_manifest.json` `blockers`; a failing item means use the documented fallback or the manual gate — UI drift never aborts a run.
+
+1. notebooklm.google.com loads and the "Create new notebook" action is present. Fallback: manual gate (user creates the notebook).
+2. Sources panel → Add source → Web → Deep Research is reachable. Fallback: Fast Research, or manual gate.
+3. The Copied-text source path accepts a pasted document (the `<input type=file>` upload path is known-broken until the native picker opens). Fallback: user uploads sources manually.
+4. Studio → Slide Deck with Format/Length customization is reachable. Fallback: manual gate (user generates the deck).
+5. The artifact's expanded viewer shows the thumbnail rail and slide images with `lh3.googleusercontent.com` srcs. Fallback: user downloads the export instead of native-resolution capture.
+6. `innerWidth` reads non-zero (window not minimized) and the screenshot buffer scale (S = screenshot width / innerWidth) computes. Fallback: ask the user to restore/maximize the Chrome window.
+
+Any item that fails gets one line in the manifest's `blockers` with the date; the run continues on the fallback path.
