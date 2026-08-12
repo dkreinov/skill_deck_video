@@ -38,6 +38,9 @@ into NotebookLM in that Chrome; music generation needs a logged-in Suno account
   Read on any notebook operation.
 - `references/research-quality.md` — registry/matrix schemas, evidence rules,
   DATA CHART requirements, audit checklist. Read when curating evidence.
+- `references/visual-style.md` — slide visual language: global style block,
+  category playbook, anti-AI-fluff rules. Read when authoring slide_division.md
+  and when reviewing rendered slides.
 - `references/singularity-forward-test.md` — acceptance test plan. Read when
   asked to run the forward test.
 - `scripts/init_research_run.py` — creates the run dir + manifest +
@@ -198,9 +201,11 @@ Then author:
 - `slide_division.md`: N slides (let content decide N; 10–15 typical). Per
   slide:
   - **Data**: exactly what appears on the slide
-  - **Visual**: one paragraph, usable directly as an image prompt. Visual
-    categories are **DIAGRAM** (flow/architecture), **DATA CHART**
-    (quantitative), or illustration.
+  - **Visual**: one paragraph, usable directly as an image prompt, written
+    per `references/visual-style.md` (declare a Global visual direction block
+    first; assertion-evidence, one accent, no AI-fluff cliches, no
+    generator-rendered numbers). Visual categories are **DIAGRAM**
+    (flow/architecture), **DATA CHART** (quantitative), or illustration.
   - Each slide lists the compact source IDs backing its claims.
   - The deck ends with a bibliography slide mapping source IDs to
     titles/URLs.

@@ -179,6 +179,7 @@ Phase 6   QA           frames + audio levels verified; research runs re-run
 | `references/research-modes.md` | Phase 0 intake fields, defaults, style-vs-evidence rules |
 | `references/notebooklm-research.md` | Notebook lifecycle, multi-pass Deep Research protocol, UI adapter |
 | `references/research-quality.md` | Source registry / evidence matrix schemas, DATA CHART rules, audit checklist |
+| `references/visual-style.md` | Slide visual language: style block, category playbook, anti-AI-fluff rules |
 | `references/singularity-forward-test.md` | Acceptance test plan for the enhanced skill — a plan only, not executed as part of this repo |
 
 ## Notes & limitations
