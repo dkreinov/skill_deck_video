@@ -2,6 +2,10 @@
 
 ![deck-video pipeline: sources → fact-checked slides → narrated video](assets/banner.png)
 
+Real output — four slides from the [example run](examples/karpathy-three-months/), generated from public posts and fact-gated:
+
+![Four slides produced by the pipeline](assets/example_slides.png)
+
 Turn a topic + trusted sources into a **fact-checked slide deck** (generated via
 Google NotebookLM / Gemini Notebook) and a **narrated MP4 with a music bed** —
 with an adversarial fact gate standing between the generator and the deliverable.
