@@ -1,17 +1,26 @@
 ---
 name: deck-video
-description: Turn a topic + trusted sources into a fact-checked slide deck (via NotebookLM) and a narrated MP4 with music. Use when the user asks for a presentation, explainer deck, or narrated presentation video built from documentation or source material. Covers research→source docs, NotebookLM slide generation (manual gate or Chrome-automated), fact verification of ALL text and visuals, watermark cleanup, TTS narration, and music mixing. When the user has no ready sources, can research the topic via NotebookLM Deep Research first.
+description: Turn a topic — with or without ready sources — into a fact-checked slide deck (via Gemini Notebook / NotebookLM) and a narrated MP4 with music. Use when the user asks for a presentation, explainer deck, narrated presentation video, or a narrated research/report video investigating a question or hypothesis. Covers one-round intake, topic-only multi-pass Deep Research (landscape + adversarial passes), claim-level evidence verification (source registry + evidence matrix), NotebookLM slide generation (manual gate or Chrome-automated), fact verification of ALL text and visuals, deterministic data charts, watermark cleanup, TTS narration, and music mixing.
 ---
 
 # deck-video — sourced deck + narrated video pipeline
 
+This skill turns a topic — with or without sources you already trust — into a
+fact-checked slide deck built in **Gemini Notebook (formerly NotebookLM)** and
+a narrated MP4 with music.
+
 Produces, from a topic and trusted sources:
-0. `research_report.md` — optional; only on the no-sources path (Phase 1R), when
-   NotebookLM Deep Research is used to generate raw source material for a topic
-1. `notebooklm_source.md` — the full factual narrative (single source of truth)
-2. `slide_division.md` — per-slide Data + Visual spec
-3. A NotebookLM-generated deck (PPTX + PDF), fact-gated and watermark-free
-4. `<name>_narrated.mp4` — narrated video; `<name>_final.mp4` — with music bed
+- On a topic-only research run (no ready sources, Phase 1R), before the deck:
+  `run_manifest.json` — run manifest and artifact ledger; `research_brief.md`
+  — intake answers, defaults, and research plan; `source_registry.md` — every
+  source found, with locators; `evidence_matrix.md` — claim-level evidence
+  linking claims to sources; `research_checkpoint.md` — written automatically
+  in place of an editorial pause — plus the preserved per-pass research
+  reports.
+- On every run: `notebooklm_source.md` — the full factual narrative (single
+  source of truth); `slide_division.md` — per-slide Data + Visual spec; the
+  NotebookLM-generated deck (PPTX + PDF), fact-gated and watermark-free;
+  `<name>_narrated.mp4` — narrated video; `<name>_final.mp4` — with music bed.
 
 Scripts live in `scripts/` next to this file. Preflight (once per machine):
 `pip install pymupdf opencv-python numpy edge-tts imageio-ffmpeg`
@@ -20,13 +29,30 @@ additionally needs the claude-in-chrome extension connected and the user logged
 into NotebookLM in that Chrome; music generation needs a logged-in Suno account
 (optional — see Phase 5 fallback).
 
+## Reference map
+
+- `references/research-modes.md` — intake fields, defaults, style-vs-evidence
+  rules. Read at Phase 0.
+- `references/notebooklm-research.md` — notebook lifecycle, multi-pass Deep
+  Research, preservation, synthesis surfaces, source isolation, UI adapter.
+  Read on any notebook operation.
+- `references/research-quality.md` — registry/matrix schemas, evidence rules,
+  DATA CHART requirements, audit checklist. Read when curating evidence.
+- `references/singularity-forward-test.md` — acceptance test plan. Read when
+  asked to run the forward test.
+- `scripts/init_research_run.py` — creates the run dir + manifest +
+  placeholders.
+- `scripts/validate_evidence.py` — validates registry/matrix; `--selftest`.
+
 ## Non-negotiable: the Fact Gate
 
 Everything shown or spoken must trace to the source documents. Enforce at three points:
 
 1. **While writing** `notebooklm_source.md`: every claim comes from a fetched source
    (docs site, user-provided files). No remembered "facts". Numbers, stage names,
-   orderings, file formats — verbatim from sources.
+   orderings, file formats — verbatim from sources. On a research run, every
+   central claim must also have an `evidence_matrix.md` row with a non-`-`
+   Locator before it may enter `notebooklm_source.md`.
 2. **Slide review** (after any generation): render every slide to PNG
    (`render_review.py`) and check EACH slide against `notebooklm_source.md`:
    - every number on the slide exists in the source doc (**no-unsourced-numbers rule**
@@ -38,6 +64,8 @@ Everything shown or spoken must trace to the source documents. Enforce at three 
    - imagery must not depict recognizable third-party brands (a "generic car" often
      renders as a Tesla)
    - phrasing that inverts meaning ("if degradation fails")
+   - numbers on a DATA CHART slide are verified against the chart's
+     **data file**, not merely the narrative paragraph
    Produce a verdict table (slide | claim | source line | pass/fix). Fix via
    NotebookLM Revise, re-export, re-review changed slides. Iterate until all pass.
    Prefer a fresh-eyes subagent for this pass — the author of slide_division.md is
@@ -45,24 +73,57 @@ Everything shown or spoken must trace to the source documents. Enforce at three 
 3. **Narration script**: same rule — the spoken text may simplify but never add
    facts/numbers absent from the source doc.
 
-## Phase 0 — Brief (one question round, before any work)
+## Phase 0 — Intake & run setup (one batched round, before any work)
 
-Slide *content* is protected by the Fact Gate; slide *framing* is protected
-here. Ask ONE batched round (AskUserQuestion) covering, at minimum:
-- **Audience & takeaway**: who sees this, and what should they know/decide
-  afterwards? (Drives tone, depth, and what the Takeaway slide claims.)
-- **Delivery mode**: presented live (Presenter format, minimal text), sent
-  around (Detailed Deck), or the narrated video as the primary artifact?
-- **Scope**: rough slide count / video length, must-cover items, must-NOT-cover
-  items (confidential internals, unreleased work).
-Accept "your call" as an answer and proceed with stated defaults (mixed
-technical audience, presenter style, 10–15 slides, ~5–7 min video). Do not
-re-litigate these choices later without new information.
+Ask ONE batched round (AskUserQuestion) covering these seven fields:
+- Central question or hypothesis
+- Research/editorial approach
+- Epistemic posture
+- Audience and desired takeaway
+- Delivery format and length
+- Scope and time boundary
+- Research permissions and extras
+
+For the full sub-questions and modes behind each field, see
+`references/research-modes.md`. "your call" is accepted as an answer for
+every field; defaults then come from that file's `## Recommended defaults`
+section — do not restate the default values here.
+
+Then run setup:
+- Run `python scripts/init_research_run.py <run-dir> --topic "<topic>"`. The
+  run directory is created in the **user's working directory** (the project
+  the video is for) — **never inside the skill repo**. This creates
+  `run_manifest.json` plus the four placeholder files. Record the intake
+  answers and defaults used in the manifest (`intake.answers`,
+  `intake.defaults_used`); every artifact path produced later is recorded in
+  the manifest's `artifacts`.
+- Create a NEW notebook per project named
+  `YYYY-MM-DD — <topic-slug> — deck-video` (the init script prints it), and
+  verify it holds no sources from another project; record its URL in the
+  manifest. Reuse a notebook only when the user explicitly continues that
+  project — see `## Notebook lifecycle` in `references/notebooklm-research.md`.
 
 For high-stakes decks (execs, external audiences, decision meetings): if a
 grill-me-style interrogation skill is available in the session, offer to run it
 instead of the mini-brief — but never depend on it; this phase is
 self-contained.
+
+## Automatic continuation and escalation
+
+After Phase 0, proceed automatically through research, synthesis, deck,
+narration, music, and QA. There is NO editorial checkpoint by default: write
+`research_checkpoint.md` (sections defined in `references/research-quality.md`)
+instead of asking.
+
+Ask the user again ONLY when:
+- login, browser control, file access, or payment authorization is required
+- the user's chosen approach is technically or legally unavailable
+- two materially different interpretations would produce different videos and the intake does not resolve them
+- central evidence is unavailable or contradictory enough that any conclusion would be misleading
+- a source or action requires new authority beyond the initial permission
+
+UI drift alone is never a reason to abandon the run — use the documented
+fallback, record it in the manifest's `blockers`, and continue.
 
 ## Phase 1 — Research & author the two docs
 
