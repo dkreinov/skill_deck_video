@@ -1,11 +1,13 @@
 ---
 name: deck-video
-description: Turn a topic + trusted sources into a fact-checked slide deck (via NotebookLM) and a narrated MP4 with music. Use when the user asks for a presentation, explainer deck, or narrated presentation video built from documentation or source material. Covers research→source docs, NotebookLM slide generation (manual gate or Chrome-automated), fact verification of ALL text and visuals, watermark cleanup, TTS narration, and music mixing.
+description: Turn a topic + trusted sources into a fact-checked slide deck (via NotebookLM) and a narrated MP4 with music. Use when the user asks for a presentation, explainer deck, or narrated presentation video built from documentation or source material. Covers research→source docs, NotebookLM slide generation (manual gate or Chrome-automated), fact verification of ALL text and visuals, watermark cleanup, TTS narration, and music mixing. When the user has no ready sources, can research the topic via NotebookLM Deep Research first.
 ---
 
 # deck-video — sourced deck + narrated video pipeline
 
 Produces, from a topic and trusted sources:
+0. `research_report.md` — optional; only on the no-sources path (Phase 1R), when
+   NotebookLM Deep Research is used to generate raw source material for a topic
 1. `notebooklm_source.md` — the full factual narrative (single source of truth)
 2. `slide_division.md` — per-slide Data + Visual spec
 3. A NotebookLM-generated deck (PPTX + PDF), fact-gated and watermark-free
@@ -71,6 +73,8 @@ later. Research procedure:
 1. **Start from what the user gave** (docs URLs, files, MCP doc tools). If they
    gave only a topic, ask where the trusted sources live — do NOT substitute
    web search for authoritative topics (internal systems, products, APIs).
+   If the user confirms no trusted sources exist AND explicitly opts in to
+   web-researched provenance, go to **Phase 1R** instead of stalling here.
    If they hand over an already-researched write-up, treat it as the raw
    source: still run step 3 (verbatim extraction) and step 4 (coverage check)
    on it, then continue from "Then author" below.
@@ -87,6 +91,49 @@ later. Research procedure:
    point at a fetched source for it? Gaps → fetch more or drop the topic.
    If the sources genuinely don't cover something the user asked for, say so
    and ask — don't fill with plausible content.
+
+### Phase 1R — No sources? Research the topic in NotebookLM
+
+Trigger: the user has only a topic, has confirmed no trusted sources exist,
+and has explicitly opted in to web-researched provenance. This path is never
+used for authoritative-doc topics (internal systems, products, APIs) — that
+rule stands regardless of opt-in.
+
+Mechanism (UI terminology frozen, verified 2026-08-12): in NotebookLM, open
+the **Sources** panel → add source → **Web** → enter the topic/question →
+choose **Deep Research** (preferred: runs in the **background** for minutes
+and produces a cited **Deep Research Report** importable together with the
+sources it found; some found sources may be **paywall**ed or otherwise
+unusable — that's normal, keep the usable ones). If Deep Research isn't
+available on the account/UI, fall back to **Fast Research** (the quicker
+"Discover sources"-style suggested-source import) and lean on the imported
+sources instead of a report.
+
+**Manual gate (default):** the user runs the research in NotebookLM, imports
+the report plus the usable sources into the notebook, and hands the report
+text back (paste or download); save it locally as `research_report.md`.
+
+**Auto mode (Chrome):** same posture as Phase 2's auto mode — drive the
+**Sources** panel → **Web** → enter the query → select **Deep Research** →
+poll for completion (minutes; wait+screenshot) → import the report and
+sources → capture the report text (e.g. get_page_text) into
+`research_report.md`. NotebookLM's UI churns — if elements moved or steps
+404, fall back to the manual gate rather than fighting it.
+
+Fact Gate integration: `research_report.md` is RAW source material, not
+trusted narrative — run Phase 1 **step 3** (verbatim extraction) and
+**step 4** (coverage check) on it before authoring `notebooklm_source.md`.
+Gaps → research again or drop the topic; never fill from memory.
+
+Provenance: `notebooklm_source.md` gets a provenance note stating the
+content is web-researched via NotebookLM Deep Research on <date>, not
+verified against authoritative docs; repeat the disclosure in the Phase 6
+deliverables conversation.
+
+Notebook reuse: do the research in the **same notebook** later used for
+slide generation — the report and imported sources stay as notebook
+sources; the two authored .md files are still uploaded, and the pasted
+outline remains the control lever.
 
 Then author:
 - `notebooklm_source.md`: full narrative — why it matters, actors, flows stage by
