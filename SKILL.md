@@ -162,7 +162,7 @@ Trigger: the user has only a topic and granted public-web Deep Research permissi
 3. Before closing ANY Deep Research result view: capture the report text, citation mapping, and the complete result inventory; default to **Import all results**; record omissions — per `## Preserve results before closing` in `references/notebooklm-research.md`. Save each pass's full report locally, one file per pass, its path recorded in the manifest's `artifacts`.
 4. Curate into `source_registry.md` and `evidence_matrix.md` per `references/research-quality.md` (schemas live there). Hard rule, verbatim: "No central claim may enter `notebooklm_source.md` without an evidence-matrix entry."
 5. Run `python scripts/validate_evidence.py <run-dir>` after curation — ERRORs block progress; WARNs are fixed or explained in `research_checkpoint.md`. Run it AGAIN after `notebooklm_source.md` and any chart data files exist (the uncited-number and chart checks need them).
-6. THE AGENT writes the synthesis: Deep Research reports are discovery leads, source summaries are orientation, Chat with selected sources is for evidence extraction, Studio Reports are an optional second opinion — per `## Synthesis surfaces` in `references/notebooklm-research.md`. NotebookLM never silently chooses the thesis.
+6. Only after the independent evidence review below: THE AGENT writes the synthesis: Deep Research reports are discovery leads, source summaries are orientation, Chat with selected sources is for evidence extraction, Studio Reports are an optional second opinion — per `## Synthesis surfaces` in `references/notebooklm-research.md`. NotebookLM never silently chooses the thesis.
 7. Write `research_checkpoint.md` (headings frozen in `references/research-quality.md`) and continue automatically on a go verdict — no user checkpoint (see "Automatic continuation and escalation" above).
 
 Mechanism: **manual gate** (default) — the user runs the research in the notebook and hands results back; **auto mode** — drive the UI per the recipe and adapter in `references/notebooklm-research.md`. Nothing else about the UI belongs here.
@@ -170,6 +170,25 @@ Mechanism: **manual gate** (default) — the user runs the research in the noteb
 Provenance: `notebooklm_source.md` carries a note that its content is web-researched via Gemini Notebook (formerly NotebookLM) Deep Research as of the run's as-of date, NOT verified against authoritative docs; the same disclosure is repeated in Phase 6.
 
 Notebook reuse: this research happens in the SAME notebook later used for slide generation.
+
+### Independent evidence review
+
+Before the synthesis is written (topic-only research runs): dispatch a
+fresh-eyes subagent — fresh context, no authoring history — that receives
+ONLY `research_brief.md`, `source_registry.md`, `evidence_matrix.md`, and the
+preserved source excerpts.
+
+Its job is adversarial: try to refute the central claims — verify each
+Locator against its source; hunt for omitted contradicting evidence;
+challenge Class and Confidence labels.
+
+Every finding must be resolved in the matrix (fix, qualify, or omit the
+claim) before synthesis; record the review and its resolutions in
+`research_checkpoint.md`.
+
+Rationale: the Independent column and the validator are bookkeeping by the
+same author; this is the only step where different eyes check the evidence
+itself.
 
 Then author:
 - `notebooklm_source.md`: full narrative (why it matters, actors, flows, how
