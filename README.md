@@ -180,7 +180,7 @@ Phase 6   QA           frames + audio levels verified; research runs re-run
 | `references/notebooklm-research.md` | Notebook lifecycle, multi-pass Deep Research protocol, UI adapter |
 | `references/research-quality.md` | Source registry / evidence matrix schemas, DATA CHART rules, audit checklist |
 | `references/visual-style.md` | Slide visual language: style block, category playbook, anti-AI-fluff rules |
-| `references/singularity-forward-test.md` | Acceptance test plan for the enhanced skill — a plan only, not executed as part of this repo |
+| `references/singularity-forward-test.md` | The acceptance test: clean-session prompt, example intake, and the 16-item pass checklist (see `examples/singularity-report/`) |
 
 ## Notes & limitations
 
@@ -197,7 +197,18 @@ Phase 6   QA           frames + audio levels verified; research runs re-run
 
 ## Example
 
-[`examples/karpathy-three-months/`](examples/karpathy-three-months/) contains a
-full **source-grounded** run on public material: source narrative, slide
-division, narration script, the fact-gate review table, the final PPTX, and
-the narrated video with music.
+Two complete runs ship with the repo, one per entry mode.
+
+[`examples/karpathy-three-months/`](examples/karpathy-three-months/) — a
+**source-grounded** run on public material: source narrative, slide division,
+narration script, the fact-gate review table, the final PPTX, and the narrated
+video with music.
+
+[`examples/singularity-report/`](examples/singularity-report/) — a
+**web-researched** run from a topic alone: the research brief written before
+any searching, all three Deep Research reports with their inventories, a
+99-source registry with provenance lineage, a 35-claim evidence matrix
+(contradictions preserved, omitted claims listed with reasons), the
+checkpoint, the agent-authored narrative, chart data with render script, the
+deck and the narrated video. Graded 14/16 against the acceptance checklist —
+its two partials are documented in that folder's README.

@@ -1,0 +1,16 @@
+# source_ids: S46, S51, S54
+# metric: probability (%) that transformative AI arrives by a given year, elicited from two
+#   distinct forecasting cohorts.
+# units: percent probability. Denominator: one elicitation per cohort per horizon year.
+# dataset_version: Forecasting Research Institute XPT-style elicitation as reported 2023;
+#   reproduced in the Pass A report table and narrative.
+# date_range: elicited 2023; horizons 2030 and 2050
+# transformation: none. Values copied verbatim from the Pass A report: "Superforecasters are
+#   far more conservative, estimating a 1% probability of transformative AI by 2030 and a 21%
+#   probability by 2050, compared to AI domain experts who estimate a 9% probability by 2030
+#   and a 46% probability by 2050" (locator A:[cite:52]).
+#   These are measurements of BELIEF, not of capability. The chart says so on its face.
+# render_command: python charts/render_charts.py forecast_disagreement
+cohort,by_2030_pct,by_2050_pct
+Superforecasters,1,21
+AI domain experts,9,46
