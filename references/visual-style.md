@@ -199,97 +199,49 @@ the rebuilt PPTX — the same path the DATA CHART replacements use.
 
 ## Visual register (asked at Phase 0)
 
-The Phase 0 intake asks how visually ambitious the deck should be. The
-register moves three things only: the share of slides carrying a picture,
-how ambitious those pictures are, and the style vocabulary. It NEVER moves
-the Fact Gate, the DATA CHART rules, the anti-cliche bans, or the
-no-generator-rendered-numbers rule.
+The Phase 0 intake asks how visually ambitious the deck should be:
 
-| Register | Pictures | Typography-only | Character |
-|---|---|---|---|
-| paper | 0-15% of slides | up to 1/3 | working paper: type, charts, hairline diagrams; the deck the numbers would write for themselves |
-| editorial (default) | >= 1/3 | up to 1/3 | magazine: a real picture per act, strong type, charts where numbers matter |
-| evocative | >= 1/2 | up to 1/4 | documentary film: pictures carry the feeling of the subject, scale contrasts, one showpiece slide |
+- **paper** — sober working-paper look: type, charts, diagrams; pictures rare.
+- **editorial** (default) — real pictures from the subject's world alongside
+  the charts and type.
+- **evocative** — imagery carries the subject's atmosphere on most slides,
+  with ONE showpiece slide (usually the cold open or the verdict).
 
-Record the chosen register in `run_manifest.json` (`intake.answers`) and
-name it in the deck's Global visual direction block, because it changes what
-the generation prompt should ask for.
+The register changes only how much the deck shows — never what counts as
+true. Fact Gate, DATA CHART rules and the cliché bans are identical in all
+three. Record the choice in `run_manifest.json` and name it in the Global
+visual direction block, because it changes what the generation prompt asks
+for.
 
-### What "wonder" is allowed to mean
+## The subject dictates the imagery
 
-Evocative does not mean science fiction, and it is not a licence to reopen
-the banned-fluff list. The rule:
+Visuals come from the topic's own world. A deck about the singularity may
+look futuristic; a deck about a deployment pipeline looks like
+infrastructure; a history deck looks like its period. The imagery should
+feel like the subject — not like "a presentation".
 
-**Wonder comes from the real at scale, never from the imagined.**
+Each image earns its slide by being part of the explanation: it depicts the
+thing a claim is about, or it makes the argument visible. The sharpest case
+is a skeptical deck: a claim about hype can SHOW the hype — the glossy
+imagined AI future on one half, the mundane real thing (a data-center
+aisle, a benchmark table) on the other, and the contrast IS the argument.
+Used that way, even the banned clichés are legitimate: the fluff list bans
+them **as decoration**, not **as the exhibit under discussion** — when the
+slide is about the imagined future, depicting the imagined future (clearly
+framed as the imagined view) is explanation, and often the most interesting
+slide in the deck.
 
-The awe in a serious subject lives in physical fact — the size of the
-infrastructure, the smallness of the feature, the length of the timescale,
-the density of the thing nobody pictures. So: a cooling hall receding into
-the dark; a transformer yard at dusk; a wafer stepper's optics; a queue of
-identical racks; a coastline of turbines; the night side of a continent lit
-by load. Never: a glowing brain, a humanoid robot, a hologram, a neon
-"digital future" cityscape. Those are imagined wonder, and they read as
-slop precisely because they are.
-
-Three levers make a real image feel large: **scale contrast** (a person-sized
-object against a landscape-sized one), **light** (a single source in a dark
-field, dawn, sodium, screen glow), and **depth** (something receding past
-where the eye can resolve it). Name at least one of them in the Visual
-paragraph.
-
-The register also sets how much of the deck is showpiece: at evocative,
-pick ONE slide — usually the cold open or the verdict — and give it the
-deck's most ambitious image.
-
-## The variety floor: earn the images
-
-The banned-fluff list says what not to draw. It is not a licence to draw
-nothing. An abstract subject (a trend, a risk, a definition) is exactly the
-case where a reader needs something to look at, and "no imagery at all" is
-the failure mode this guide must prevent as firmly as the glowing brain.
-
-Minimum for any deck of ~10+ slides, at the DEFAULT editorial register
-(paper and evocative shift the first two numbers per the register table):
-
-- **At least a third of the slides carry a real picture** — a scene, an
-  object, a place, a process rendered as something you could photograph or
-  draw, not a hairline abstraction. Charts, tick-marks, rules, arrows and
-  pure typography do NOT count toward this third.
-- **At most one third pure typography** (large-type quote or verdict
-  slides). Two or three in a 13-slide deck is plenty.
-- **No three consecutive slides without a picture** (all registers,
-  including paper).
-
-"Evidence, not decoration" governs WHAT an image shows, not whether an
-image exists. An image is evidence when it makes the claim legible: the
-concrete instance behind an abstraction (the actual bottleneck: a
-substation, a transformer yard, a cooling hall), the physical object a
-number describes, the scene a scenario would look like. It is decoration
-when any deck could use it.
-
-Finding a picture for an abstract claim — the drill:
-
-1. Name the most concrete noun in the claim. "Compute is constrained" →
-   transformers, substations, cooling. "Automation of research" → a bench,
-   a terminal, a queue of experiments.
-2. Put that noun in a real place, at a stated scale, with the deck's
-   palette and lighting: "a row of grid transformers behind chain-link at
-   dusk, seen from a low angle, near-black sky, the deck's amber only in
-   the sodium lamps."
-3. Say what the picture encodes ("the queue is the wait, not the machine").
-4. Add the risky-subject constraints (generic/unbranded, no readable text,
-   no faces) — the same specificity that avoids stock clichés is what makes
-   the image striking.
-
-If a scene genuinely cannot be found for a claim, that slide is a
-typography or diagram slide — but the deck as a whole must still clear the
-floor above.
+Keep something to look at on most slides. Pure typography is for a few
+verdict or quote moments — never several text-only slides in a row, in any
+register. When writing a picture for an abstract claim: name the most
+concrete noun in the claim, put it in a real place at a stated scale in the
+deck's palette, and say what it encodes.
 
 ## Deck-level rhythm
 
 - Vary the species: never three consecutive slides of the same category. A
-  strong deck alternates diagram / chart / typography / illustration, and
-  clears the variety floor above — count the categories before generating.
+  strong deck alternates diagram / chart / typography / illustration —
+  count the categories before generating.
 - The cold open and the takeaway slide get the boldest treatment (full-bleed
   typography or the deck's single most striking composition).
 - Report-video decks: the measurement-dashboard beat is DATA CHART

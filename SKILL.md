@@ -234,9 +234,9 @@ outline follows this twelve-beat structure, in order:
 
 Narration carries the reasoning; slides show evidence — pictures, diagrams,
 timelines, charts — never paragraphs of report text. A report deck still
-has to be watchable: hold the variety floor in
-`references/visual-style.md` (a third of slides carrying a real picture),
-so an evidence deck does not collapse into hairlines and type.
+has to be watchable: per `references/visual-style.md`, imagery comes from
+the subject's own world and sits on most slides, so an evidence deck does
+not collapse into hairlines and type.
 
 ### DATA CHART slides
 

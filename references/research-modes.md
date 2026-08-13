@@ -56,16 +56,13 @@ default from "Recommended defaults."
 8. **Visual register** — how visually ambitious the slides should be. This
    sets how the deck LOOKS, never what counts as true; the Fact Gate, the
    evidence rules and the anti-cliche bans are identical in all three:
-   - **paper** — sober and documentary: type, charts and diagrams, pictures
-     rare. Reads like a working paper.
-   - **editorial** — magazine-like: real pictures on at least a third of
-     slides, strong typography, charts where numbers matter.
-   - **evocative** — cinematic: imagery that carries the wonder of the
-     subject on half or more of the slides, big scale contrasts, still
-     fact-gated and still free of AI cliches.
-   Ask also whether any single slide should be the deck's showpiece.
-   Definitions of each register, and what "wonder" is allowed to mean, are
-   in `references/visual-style.md` (`## Visual register`).
+   - **paper** — sober: type, charts and diagrams; pictures rare.
+   - **editorial** — real pictures from the subject's world alongside the
+     charts and type.
+   - **evocative** — imagery carries the subject's atmosphere; one
+     showpiece slide.
+   Register definitions, and how imagery follows the subject, are in
+   `references/visual-style.md` (`## Visual register`).
 
 ## Recommended defaults
 
@@ -85,9 +82,9 @@ matching default:
 - 12-18 minutes for a narrated report video (delivery format and length);
 - neutral documentary tone and subtle or no music (research permissions and
   extras, and general delivery tone);
-- **editorial** visual register (visual register) — pictures on at least a
-  third of slides, charts where numbers matter; choose **evocative** when
-  the subject itself is a source of wonder and the audience is general;
+- **editorial** visual register — pictures from the subject's world
+  alongside the charts; choose **evocative** when the subject invites awe
+  and the audience is general;
 - full automatic continuation after the intake — no second editorial
   checkpoint unless the user asked for one (research permissions and
   extras).
