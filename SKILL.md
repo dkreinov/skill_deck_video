@@ -20,7 +20,9 @@ Produces, from a topic — with or without ready sources:
 - On every run: `notebooklm_source.md` — the full factual narrative (single
   source of truth); `slide_division.md` — per-slide Data + Visual spec; the
   NotebookLM-generated deck (PPTX + PDF), fact-gated and watermark-free;
-  `<name>_narrated.mp4` — narrated video; `<name>_final.mp4` — with music bed.
+  `<name>_final.mp4` — the narrated video with music bed, the single video
+  deliverable (`<name>_narrated.mp4` is an intermediate, shipped only when
+  no music source exists).
 
 Scripts live in `scripts/` next to this file. Preflight (once per machine):
 `pip install pymupdf opencv-python numpy edge-tts imageio-ffmpeg`
@@ -418,9 +420,10 @@ pixel edits.
   → lower loudness-stddev (steadier) and longer duration win for a background bed.
 - Mix: `python scripts/mix_music.py video.mp4 music.mp3 out.mp4 --bed-db -25`
   — auto-gains music to the target bed level, lowpass 10k, fade in/out, video
-  stream copied untouched. Produce TWO versions by default: `--bed-db -25`
-  (present; survives laptop speakers) and `--bed-db -35` (subtle) — users
-  reliably ask for the other one.
+  stream copied untouched. Produce ONE final video (`--bed-db -25` default —
+  survives laptop speakers). Do not ship level variants; if the user asks for
+  a softer/louder bed, remix from the narrated intermediate — it takes
+  seconds and the video stream is copied untouched.
 - Verify: the script prints speech-region levels (peaks should sit at least
   10 dB above the bed). To also verify the bed level itself, pass
   `--gap-ss <t>` with a timestamp of a known music-only moment — e.g. a slide
@@ -430,8 +433,10 @@ pixel edits.
 ## Phase 6 — QA & deliver
 
 - Extract 2–3 frames from the final MP4 and eyeball; confirm audio levels printed.
-- Deliverables table: final.mp4 (+ soft-music variant), narrated.mp4 (no music,
-  fallback), clean.pptx, narration_script.md, the two source docs. On research
+- ONE video deliverable: final.mp4. After it passes QA, delete narrated.mp4
+  and any other mix variants — narrated.mp4 is shipped only when no music
+  source was available (then it IS the final). Also deliver: clean.pptx,
+  narration_script.md, the two source docs. On research
   runs, also list: `run_manifest.json`, `research_brief.md`,
   `source_registry.md`, `evidence_matrix.md`, `research_checkpoint.md`, the
   preserved per-pass research reports, and any chart data files.

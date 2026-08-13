@@ -41,8 +41,8 @@ Plus the preserved per-pass research reports (one file per Deep Research pass).
 | `notebooklm_source.md` | Full factual narrative, every claim traced to a fetched source |
 | `slide_division.md` | Per-slide spec: Data (what's on the slide) + Visual (image/diagram prompt) |
 | Deck (PPTX) | Gemini Notebook-generated slides, fact-gated, watermark-free, rebuilt locally |
-| `*_narrated.mp4` | Neural-TTS narration, per-slide timing measured (sync by construction) |
-| `*_final.mp4` | Narrated video with an auto-gained music bed |
+| `*_final.mp4` | The single video deliverable: neural-TTS narration (per-slide timing measured, sync by construction) with an auto-gained music bed |
+| `*_narrated.mp4` | Intermediate without music — deleted after QA, shipped only if no music source exists |
 
 See a complete real run in [`examples/karpathy-three-months/`](examples/karpathy-three-months/) —
 a deck + video built from Andrej Karpathy's public posts (summer 2026), including
