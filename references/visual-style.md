@@ -227,9 +227,12 @@ imagined AI future on one half, the mundane real thing (a data-center
 aisle, a benchmark table) on the other, and the contrast IS the argument.
 Used that way, even the banned clichés are legitimate: the fluff list bans
 them **as decoration**, not **as the exhibit under discussion** — when the
-slide is about the imagined future, depicting the imagined future (clearly
-framed as the imagined view) is explanation, and often the most interesting
-slide in the deck.
+slide is about the imagined future, depicting the imagined future is
+explanation, and often the most interesting slide in the deck. The framing
+that keeps it honest lives in the slide's headline and the narration — a
+title like "the future we imagine vs. the one we measure" does the work.
+Never stamp caption labels into the artwork itself; the composition and the
+spoken line carry the meaning.
 
 Keep something to look at on most slides. Pure typography is for a few
 verdict or quote moments — never several text-only slides in a row, in any

@@ -100,9 +100,9 @@ Fact Gate, not instead of it.
 ### Science-fiction approach
 
 Use fiction only to introduce mental models or illustrative scenarios.
-Label any fictional or speculative framing explicitly wherever it appears
-(on-slide or in narration) so the audience can never mistake it for a
-factual claim. Never use science-fiction material to support, illustrate as
+Make the speculative framing unmistakable through the slide's headline and
+the narration — never through caption labels stamped into the artwork.
+Never use science-fiction material to support, illustrate as
 proof, or stand in for an empirical claim. If a scenario is plausible but
 unverified, present it as a scenario, not as evidence.
 
