@@ -10,6 +10,15 @@ clean-session prompt from `references/singularity-forward-test.md` —
 narrative, deck, narration, music, QA) ran automatically. Run date
 2026-08-12; as-of date of the report itself is the same day.
 
+The deck was regenerated on 2026-08-13 at the **evocative** visual register
+(`references/visual-style.md`): the research, narrative, narration and the
+four DATA CHART slides are unchanged; only the Global visual direction and
+the per-slide Visual paragraphs were rewritten. The deck's image system has
+two kinds — REAL (ordinary machinery, photographed plainly, the single amber
+accent appearing only as actual light) and IMAGINED (the singularity as
+popular culture pictures it) — and the argument lives in the distance
+between them, framed by headlines and narration rather than labels.
+
 This is the counterpart to [`../karpathy-three-months/`](../karpathy-three-months/),
 which is a **source-grounded** run. Here nothing was supplied but a question.
 

@@ -1,39 +1,65 @@
 # Slide division — "Are we approaching the technological singularity?"
 
 13 slides. Narrated report video, ~15 minutes, technically curious general audience.
-As-of date 2026-08-12, forecast horizon 2035.
+As-of date 2026-08-12, forecast horizon 2035. **Visual register: evocative.**
 
-**Global visual direction:** Minimal editorial dark — the visual language of a serious
-printed science review, not a technology marketing deck. Background is a flat near-black
-`#0B0E14` on every slide, edge to edge. Primary marks and headline type are pale grey
-`#D7DEE8`; secondary marks, axes and captions are muted slate `#6E7A8A`. There is exactly
-ONE accent, amber `#E8A33D`, and it carries a fixed meaning for the whole deck: **the amber
-element is the single measured thing that decides the slide's claim.** Never use amber for
-decoration, never accent two things on one slide, and never introduce any other colour.
-Typography: a large light grotesque sans for assertions, small monospace for labels, figures
-and axis text. Rendering: flat matte and vector-like, generous empty space, thin hairline
-rules. Bans, standing for every slide: no gradients, no glows, no shadows, no lens flares,
-no bokeh, no 3D or isometric clip-art, no frames or border decoration, no blueprint or HUD
-overlays, no grid-paper texture, no glowing brains, no circuit-board heads, no humanoid
-robots, no handshakes, no padlocks, no light bulbs, no gears, no rockets, no puzzle pieces,
-no stock-photo people, no faces or hands, no company logos or recognisable brands, and no
-words or numbers rendered inside artwork except where a slide explicitly asks for them.
-Reference only concepts explicitly present in the sources. Keep this style identical across
-all slides.
+Supersedes `slide_division_paper.md`, `slide_division_editorial.md` and
+`slide_division_evocative.md` (the 2026-08-13 register comparison). Slide titles, order,
+Data fields, per-slide source IDs and the four DATA CHART slides are unchanged from that
+comparison; only the Global visual direction block and the Visual paragraphs are rewritten,
+against the updated `references/visual-style.md`.
 
-Visual categories: **DIAGRAM** (flow/structure), **DATA CHART** (quantitative — rendered
-deterministically from `charts/*.csv` by `charts/render_charts.py`, which takes its
-background, neutral and accent from this same style block), **TYPOGRAPHY** (the slide is
-the words), or illustration.
+**Global visual direction:** Speculative documentary — the visual language of a serious
+documentary about a contested future, where the camera is shown both the promised future and
+the actual machinery, and the distance between them is the story. Background is a flat
+near-black `#07090C` on every slide, edge to edge. Type and primary marks are pale `#DCE3EA`;
+secondary marks, rules, axes and captions are cool grey `#79838F`. There is exactly ONE
+accent, sodium amber `#E8A33D`, and it carries a fixed meaning for the whole deck: **the
+amber element is the single measured thing that decides the slide's claim.** Inside a
+photograph, amber appears only as real light — a lamp, a screen, a sodium fitting — never as
+an overlay. Never accent two things on one slide and never introduce another colour.
+Typography: a large light grotesque sans for assertions, small monospace for labels, figures,
+axis text and captions.
 
-Deck rhythm: typography → diagram → illustration → chart → diagram → chart → chart →
-illustration → diagram → chart → diagram → typography → typography. Slides 5 and 8 are
-mirrored compositions (same layout, accent on opposite sides) because they carry the
-evidence-for and evidence-against beats. Slides 1 and 12 get the boldest treatment.
+Most slides carry a picture, and every picture comes from this subject's own world. Pictures
+are of exactly two kinds, and the deck's argument lives in the difference between them:
+
+- **REAL** — ordinary machinery photographed straight and unglamorously: machine-room
+  aisles, substation yards, instrument racks, paper on a desk. One light source, deep
+  shadow, no styling.
+- **IMAGINED** — the singularity as popular culture pictures it: colossal luminous
+  structures, chrome, ascending light, scale beyond architecture. This is permitted **only
+  as the exhibit under discussion**, never as background decoration.
+
+Where both appear on one slide they are divided by a hard edge and left to speak for
+themselves; the composition carries the contrast, not a caption. No text is rendered inside
+artwork at all.
+
+Bans. Banned everywhere as decoration, and admissible **only where the
+imagined future is itself the exhibit**: humanoid robots, glowing brains,
+holograms, neon "digital future" cityscapes. Banned outright on every slide, with no
+exception: gradients used as decoration, lens flares, bokeh sparkle, isometric 3D clip-art,
+decorative frames or borders, blueprint or HUD overlays, digital rain, padlocks, light
+bulbs, gears, rockets, puzzle pieces, robot–human handshakes, stock-photo people, faces or
+hands, company logos or recognisable brands, and any word or number rendered inside
+artwork. Reference only concepts explicitly present in the
+sources. Keep this style identical across all slides.
+
+Visual categories: **PICTURE** (a photograph or render from the subject's world),
+**DIAGRAM** (flow/structure), **DATA CHART** (quantitative — rendered deterministically from
+`charts/*.csv`; the existing renders in `charts/out_evocative/` are reused unchanged and
+already draw their background, neutral and accent from this same style block),
+**TYPOGRAPHY** (the slide is the words).
+
+Deck rhythm: picture → diagram → picture → chart → picture → chart → chart → picture →
+picture → chart → picture → picture → typography. No three consecutive slides share a
+category, and only slide 13 is text-only. **Slide 1 is the showpiece.** The imagined/real
+contrast is stated three times, escalating: the cold open is the dream (slide 1), slide 5
+splits the frame between dream and thing, slide 9 puts the dream under the FRAMING ONLY
+banner, and slide 12 answers slide 1 with the thing itself.
 
 Slides 4, 6, 7 and 10 are DATA CHART slides; their generated images are **replaced** after
-capture with the local renders in `charts/out/`, so every number on screen comes from a data
-file with recorded `source_ids`.
+capture with the unchanged renders in `charts/out_evocative/`.
 
 ---
 
@@ -43,10 +69,10 @@ file with recorded `source_ids`.
 - Title: Are we approaching the technological singularity?
 - Subtitle: A calibrated status as of 12 August 2026
 - One line: "The honest answer depends entirely on which of five questions you are asking."
-**Visual:** **TYPOGRAPHY.** Full-bleed dark field, no imagery at all. The question set very
-large in pale grey across the upper two-thirds with enormous margins; the subtitle and the
-single line small beneath it. The word "five" is the only amber element on the slide,
-marking the count the rest of the deck unpacks.
+**Visual:** **PICTURE — showpiece.** Full-bleed IMAGINED. The singularity as popular culture
+pictures it: a colossal luminous structure climbing out of a dark plain, far taller than any
+real building, seen from ground level so it exceeds the frame. This is the picture already in the
+audience's head; the deck exists to test it.
 
 ## Slide 2 — Five different questions wearing one word
 **Sources:** S14, S13
@@ -56,10 +82,10 @@ marking the count the rest of the deck unpacks.
   3. Recursive self-improvement · 4. Economic growth discontinuity ·
   5. Social/institutional discontinuity
 - Bottom line: AGI and superintelligence name a *level*. The singularity names a *rate*.
-**Visual:** **DIAGRAM.** One pale grey word at the left splitting into five thin horizontal
-lines that fan rightward to five stacked rows, top to bottom. The third line, recursive
-self-improvement, is amber and slightly thicker — it is the one the singularity claim
-actually depends on. No boxes, no icons, hairline rules only.
+**Visual:** **DIAGRAM.** One word at the left splitting into five thin horizontal rules that
+fan rightward across the dark field to five numbered rows. The third rule, recursive
+self-improvement, is amber and slightly heavier — it is the one the singularity claim
+actually depends on. Hairlines only, no boxes.
 
 ## Slide 3 — What we can actually measure
 **Sources:** S56, S23, S64, S01, S15, S43
@@ -68,10 +94,10 @@ actually depends on. No boxes, no icons, hairline rules only.
 - Task horizon (METR) · Benchmark-to-practice gap · AI share of engineering work ·
   Algorithmic efficiency · Macro productivity · Physical power delivery
 - Caption: None of these six measures the loop itself — that measurement comes later.
-**Visual:** Illustration, abstract geometric. Six identical pale grey tick marks evenly
-spaced along a single horizontal hairline, each with its label set beneath in small
-monospace. A seventh position at the far right is empty, marked only by an amber outline
-with nothing inside it — the loop measurement we do not have here.
+**Visual:** **PICTURE — REAL.** A rack holding exactly six analogue measuring instruments in
+a dark equipment room, a single raking light across their faces, and beside them a seventh
+bay standing empty and unlit. Six instruments, no more. The empty bay is the loop measurement
+we do not have. Unbranded, dial faces unreadable.
 
 ## Slide 4 — The capability clock is speeding up
 **Sources:** S56
@@ -93,10 +119,10 @@ zero, bars direct-labelled, no legend.
 - Kernel optimisation loop: 2.8x geometric-mean speedup on vLLM operators
 - Flag: interested sources; the metric does not separate boilerplate from core
   training-loop code
-**Visual:** **DIAGRAM.** Text block on the left, figure on the right. A ring of four
-pale grey nodes read clockwise — model, writes code, trains, next model. Three arcs are
-solid; the arc returning to "model" is a dashed gap in amber, marking the part of the loop
-that is not closed.
+**Visual:** **PICTURE — split frame, the deck's central contrast.** A hard vertical edge down
+the middle. Left, the imagined: a gleaming machine assembling a copy of itself in blank
+white light. Right, the real: an ordinary machine-room aisle at night, one service lamp, a
+wall screen of unreadable queued rows. The seam is the argument.
 
 ## Slide 6 — Ask for reliability and the horizon collapses
 **Sources:** S89
@@ -107,7 +133,7 @@ that is not closed.
 - Source note: METR Frontier Risk Report (Feb–Mar 2026), published 2026-05-19.
 **Visual:** **DATA CHART.** Two pairs of vertical bars, one pair per configuration. The
 50%-success bars are neutral grey; both 80%-success bars are amber, because the strict bar
-is the one that governs unattended work. Zero-based axis, bars direct-labelled, no legend.
+is the one that governs unattended work. Zero-based axis, direct-labelled, no legend.
 
 ## Slide 7 — The benchmark and the maintainer disagree
 **Sources:** S23, S03, S04
@@ -118,8 +144,8 @@ is the one that governs unattended work. Zero-based axis, bars direct-labelled, 
 - On-slide warning: three different graders, three different denominators — not a decline
   over time.
 **Visual:** **DATA CHART.** Three horizontal bars, each carrying its own denominator as a
-small caption. Only the human-maintainer bar is amber — it is the measurement that contradicts
-the benchmark. Zero-based axis, direct-labelled, no legend.
+small caption. Only the human-maintainer bar is amber — it is the measurement that
+contradicts the benchmark. Zero-based axis, direct-labelled, no legend.
 
 ## Slide 8 — Autonomous science, and one correction
 **Sources:** S08, S76, S96
@@ -130,10 +156,10 @@ the benchmark. Zero-based axis, direct-labelled, no legend.
   peer-reviewed journal**
 - The March 2026 *Nature* paper is human-authored and describes the system; the one
   AI-generated paper that cleared an ICLR workshop bar was withdrawn before publication
-**Visual:** Illustration, mirroring slide 5 with the figure on the left and the text on the
-right. A tall stack of thin pale grey horizontal lines standing for a manuscript, seen
-straight on; a single amber rule struck through one line near the top marks the claim that
-was corrected. No readable words in the artwork.
+**Visual:** **PICTURE — REAL.** A printed paper under one desk lamp in a dark room, pages
+fanned across the pool of light, the top sheet turned face-down and pushed to the edge where
+the light gives out. The face-down sheet is the paper that was withdrawn. Unbranded, no
+readable text, no hands.
 
 ## Slide 9 — Weak signals, and a framing device
 **Sources:** S89, S90, S97, S98, S99, S13, S45
@@ -145,10 +171,10 @@ was corrected. No readable words in the artwork.
 - Header on the lower half, verbatim: **FRAMING ONLY — NOT EVIDENCE**
 - Good (1965) assumes frictionless scaling · Vinge (1993) requires a vertical asymptote ·
   Seed-AI/"FOOM" assumes a software-only takeoff
-**Visual:** **DIAGRAM.** The slide divided by one full-width amber hairline. Above it, four
-short pale grey vertical bars of even height standing for measurable indicators. Below it,
-three faint outlined rectangles at lower contrast standing for the three historical models.
-The rule is the only amber element; it separates evidence from framing.
+**Visual:** **PICTURE — stacked halves, divided by one full-width amber rule.** Above the
+rule, a dim ordinary control room with four lit monitors. Below the rule, a glossy imagined
+takeoff — chrome forms and light ascending into white. The rule is the only amber element;
+it separates evidence from framing.
 
 ## Slide 10 — The forecasters do not agree
 **Sources:** S46, S51, S54
@@ -168,10 +194,10 @@ stays neutral grey. Zero-based axis, direct-labelled, no legend.
 - Parallelisation: capped by serial experiment depth and coordination cost
 - Power and economics: interconnection takes 36–60 months; US TFP growth at 0.53% — though
   J-curve revisions imply that is not a hard ceiling
-**Visual:** **DIAGRAM.** One long pale grey horizontal arrow running left to right across
-the slide, crossed by five vertical bars of differing heights. Two bars are drawn as faint
-outlines because those constraints are contested; the power bar is solid amber and the
-tallest, the one constraint nobody disputes. Labels beneath in small monospace.
+**Visual:** **PICTURE — REAL.** A substation yard at dusk behind chain-link, shot from a low
+angle so the transformers tower over the fence and recede into haze, a single sodium fitting
+the only warm light, a small access gate at the near end for scale. The queue of transformers
+is the wait for power. Unbranded, no readable text.
 
 ## Slide 12 — The calibrated answer, 12 August 2026
 **Sources:** S89, S56, S64, S23, S08, S45
@@ -183,10 +209,10 @@ tallest, the one constraint nobody disputes. Labels beneath in small monospace.
 - Verdict: not measurably inside a singularity; measurably inside a period of unusually fast
   capability growth in which AI does much of AI engineering
 - Confidence: moderate — the decisive metric is self-reported by the labs being evaluated
-**Visual:** **TYPOGRAPHY.** The deck's boldest slide. Two columns of short pale grey lines
-under the words "observed" and "not observed", separated by one hairline rule. The verdict
-sits beneath in large light type, with the two words "not yet" in amber — the whole report
-turns on them. No imagery.
+**Visual:** **PICTURE — REAL, answering slide 1.** The same low camera angle and the same
+dark plain as the cold open, but the structure on the horizon is an ordinary low windowless
+building with cooling plumes rising in still air. Upper frame stays empty for the verdict
+type. The two words "not yet" are the only amber.
 
 ## Slide 13 — What would change this, and where it came from
 **Sources:** S89, S92, S76, S78, S79, S56 — plus full bibliography
@@ -206,25 +232,22 @@ turns on them. No imagery.
   Pebblous correction · [S45] Epoch AI, Parallelization constraints · [S49] Acemoglu, Simple
   macroeconomics of AI · [S84] Contamination systematic review · [S85] ACL 2026 Test of Time ·
   [S46] Forecasting Research Institute
-**Visual:** **TYPOGRAPHY.** Purely typographic on the dark field. A left column of five short
-trigger lines, each preceded by a small amber tick; a right column of source identifiers set
-small in monospace at lower contrast. The provenance line runs full width along the bottom.
-No imagery.
+**Visual:** **TYPOGRAPHY.** End titles on the dark field. A left column of five short trigger
+lines, each preceded by a small amber tick; a right column listing each source identifier
+with its title in monospace at lower contrast. The provenance line runs full width along the
+bottom. No imagery.
 
 ---
 
 ## NotebookLM run notes
 
-- Sources selected for generation: **only** `notebooklm_source.md` and `slide_division.md`.
-  All research sources, Deep Research reports and saved notes must be **deselected**.
-  Verify the checkboxes before generating — hard gate.
+- Sources selected for generation: **only** `notebooklm_source.md` and this file. Every
+  other source in the notebook must be **unticked**. Verify before generating — hard gate.
 - Studio → Slide Deck → Format **Presenter Slides**, Length **Default**.
-- The Global visual direction block above is pasted verbatim into the generation prompt —
-  that is the only place deck style can be set.
-- After generation: audit every slide against `notebooklm_source.md` (no-unsourced-numbers
-  rule), batch all fixes into as few Revise passes as possible, re-check untouched slides,
-  then capture at native resolution.
-- Replace slides 4, 6, 7 and 10 with `charts/out/*.png` before building the PPTX and video.
+- The Global visual direction block above is pasted verbatim into the generation prompt.
+- Audit every slide, including any text the generator renders inside artwork — zoom and
+  read it. Batch all fixes into as few Revise passes as possible.
+- Replace slides 4, 6, 7 and 10 with the unchanged renders in `charts/out_evocative/`.
 - Re-exports from NotebookLM re-add the watermark → rerun the watermark cleanup.
 
 ## Outline paste prompt
@@ -248,23 +271,37 @@ Create exactly 13 slides. Use this outline EXACTLY — same order, same titles, 
 For each slide use the matching "Data" and "Visual" descriptions from the Slide Division
 source. Keep text minimal: key message plus a maximum of 3 bullets per slide. Do not invent
 any number, percentage, date or source name that does not appear in the sources. Slide 9
-must carry the words FRAMING ONLY - NOT EVIDENCE exactly. Slide 13 must list the source IDs
-given.
+must carry the words FRAMING ONLY - NOT EVIDENCE exactly. Slide 13 must list each source ID
+with its title.
 
-House style for EVERY slide: Minimal editorial dark — the visual language of a serious
-printed science review, not a technology marketing deck. Background is a flat near-black
-#0B0E14 on every slide, edge to edge. Primary marks and headline type are pale grey #D7DEE8;
-secondary marks, axes and captions are muted slate #6E7A8A. There is exactly ONE accent,
-amber #E8A33D, and it carries a fixed meaning for the whole deck: the amber element is the
-single measured thing that decides the slide's claim. Never use amber for decoration, never
-accent two things on one slide, and never introduce any other colour. Typography: a large
-light grotesque sans for assertions, small monospace for labels, figures and axis text.
-Rendering: flat matte and vector-like, generous empty space, thin hairline rules. Bans,
-standing for every slide: no gradients, no glows, no shadows, no lens flares, no bokeh, no 3D
-or isometric clip-art, no frames or border decoration, no blueprint or HUD overlays, no
-grid-paper texture, no glowing brains, no circuit-board heads, no humanoid robots, no
-handshakes, no padlocks, no light bulbs, no gears, no rockets, no puzzle pieces, no
-stock-photo people, no faces or hands, no company logos or recognisable brands, and no words
-or numbers rendered inside artwork except where a slide explicitly asks for them. Reference
-only concepts explicitly present in the sources. Keep this style identical across all slides.
+House style for EVERY slide: Speculative documentary - the visual language of a serious
+documentary about a contested future, where the camera is shown both the promised future and
+the actual machinery, and the distance between them is the story. Background is a flat
+near-black #07090C on every slide, edge to edge. Type and primary marks are pale #DCE3EA;
+secondary marks, rules, axes and captions are cool grey #79838F. There is exactly ONE accent,
+sodium amber #E8A33D, and it carries a fixed meaning for the whole deck: the amber element is
+the single measured thing that decides the slide's claim. Inside a photograph, amber appears
+only as real light - a lamp, a screen, a sodium fitting - never as an overlay. Never accent
+two things on one slide and never introduce another colour. Typography: a large light
+grotesque sans for assertions, small monospace for labels, figures, axis text and captions.
+
+Most slides carry a picture, and every picture comes from this subject's own world. Pictures
+are of exactly two kinds, and the deck's argument lives in the difference between them. REAL:
+ordinary machinery photographed straight and unglamorously - machine-room aisles, substation
+yards, instrument racks, paper on a desk; one light source, deep shadow, no styling. IMAGINED:
+the singularity as popular culture pictures it - colossal luminous structures, chrome,
+ascending light, scale beyond architecture; this is permitted only as the exhibit under
+discussion, never as background decoration. Where both appear on one slide they are divided
+by a hard edge and left to speak for themselves; the composition carries the contrast, not a
+caption. No text is rendered inside artwork at all.
+
+Bans. Banned everywhere as decoration, and admissible only where the imagined future is
+itself the exhibit: humanoid robots, glowing brains, holograms,
+neon digital-future cityscapes. Banned outright on every slide with no exception: gradients
+used as decoration, lens flares, bokeh sparkle, isometric 3D clip-art, decorative frames or
+borders, blueprint or HUD overlays, digital rain, padlocks, light bulbs, gears, rockets,
+puzzle pieces, robot-human handshakes, stock-photo people, faces or hands, company logos or
+recognisable brands, and any word or number rendered inside artwork or inside
+photographs. Reference only concepts explicitly present in the sources. Keep this style
+identical across all slides.
 ```

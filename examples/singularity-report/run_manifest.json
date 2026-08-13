@@ -65,7 +65,7 @@
     },
     "deck": {
       "status": "complete",
-      "updated_at": "2026-08-13T11:05:00+00:00"
+      "updated_at": "2026-08-13T16:20:00+00:00"
     },
     "narration": {
       "status": "complete",
@@ -234,5 +234,189 @@
       "subtle": -28.9
     },
     "speech_peak_dB": -3.2
+  },
+  "register_variants": {
+    "created": "2026-08-13",
+    "purpose": "three visual-register variants of the same report for side-by-side selection; no research re-run",
+    "held_constant": [
+      "13 slide titles and order",
+      "every Data field",
+      "source IDs per slide",
+      "the four DATA CHART slides: same CSVs, same numbers, same message, same accent semantics"
+    ],
+    "varied": [
+      "Global visual direction block",
+      "Visual paragraphs",
+      "chart palette (re-rendered per register so charts belong to their deck)"
+    ],
+    "variants": {
+      "paper": {
+        "spec": "slide_division_paper.md",
+        "deck": "Singularity Audit 2026",
+        "pptx": "singularity_paper.pptx",
+        "slides": "slides_paper_clean/",
+        "charts": "charts/out_paper/",
+        "palette": {
+          "bg": "#F4F1EA",
+          "ink": "#1B1B18",
+          "muted": "#6E6A62",
+          "accent": "#8C3A2B"
+        },
+        "pictures": 2,
+        "typography": 3,
+        "diagrams": 4,
+        "charts_n": 4,
+        "fixes": 1
+      },
+      "editorial": {
+        "spec": "slide_division_editorial.md",
+        "deck": "Singularity Calibration",
+        "pptx": "singularity_editorial.pptx",
+        "slides": "slides_editorial_clean/",
+        "charts": "charts/out_editorial/",
+        "palette": {
+          "bg": "#FAFAF8",
+          "ink": "#111214",
+          "muted": "#6F7378",
+          "accent": "#C0392B"
+        },
+        "pictures": 5,
+        "typography": 2,
+        "diagrams": 2,
+        "charts_n": 4,
+        "fixes": 5
+      },
+      "evocative": {
+        "spec": "slide_division_evocative.md",
+        "deck": "Singularity Calibrated",
+        "pptx": "singularity_evocative.pptx",
+        "slides": "slides_evocative_clean/",
+        "charts": "charts/out_evocative/",
+        "palette": {
+          "bg": "#07090C",
+          "ink": "#DCE3EA",
+          "muted": "#79838F",
+          "accent": "#E8A33D"
+        },
+        "pictures": 7,
+        "typography": 1,
+        "diagrams": 1,
+        "charts_n": 4,
+        "fixes": 8,
+        "showpiece_slide": 1
+      }
+    },
+    "source_isolation": "verified by screenshot before each of the three generations (only notebooklm_source.md + that variant ticked)",
+    "known_rule_conflict": "paper register: pictures capped at 0-15% (2 of 13) cannot also satisfy \"no three consecutive slides without a picture\"; best placement (slides 5 and 9) leaves runs of 4. Register ceiling was honoured; violation reported.",
+    "fact_gate": "fact_gate_variants.md",
+    "narration": "not rebuilt - audio is identical across variants; rebuild the video only after a winner is chosen"
+  },
+  "deck_regeneration_2026_08_13b": {
+    "trigger": "skill updated: references/visual-style.md replaced the wonder-from-the-real rule with \"The subject dictates the imagery\", and dropped the numeric variety floor",
+    "scope": "slide deck only - research artifacts frozen (brief, registry, evidence matrix, checkpoint, notebooklm_source.md untouched)",
+    "frozen": [
+      "13 slide titles and order",
+      "every Data field",
+      "per-slide source IDs",
+      "the four DATA CHART slides: same CSVs and the same rendered PNGs in charts/out_evocative/ reused unchanged"
+    ],
+    "rewritten": [
+      "Global visual direction block",
+      "all 13 Visual paragraphs"
+    ],
+    "register": "evocative",
+    "genre": "speculative documentary",
+    "palette": {
+      "bg": "#07090C",
+      "primary": "#DCE3EA",
+      "muted": "#79838F",
+      "accent": "#E8A33D"
+    },
+    "palette_note": "pinned to the existing charts/out_evocative palette so the rendered charts stay valid and unchanged",
+    "imagery_rule": "two picture kinds, REAL and IMAGINED; IMAGINED (glossy sci-fi singularity) permitted only as the tagged exhibit under discussion, never as decoration; in-image text limited to the tags IMAGINED / REAL / MEASURED",
+    "hype_vs_real_contrast": {
+      "slide_5": "true split frame, IMAGINED | REAL either side of a hard vertical edge",
+      "slide_9": "stacked halves, imagined below the FRAMING ONLY - NOT EVIDENCE rule",
+      "slide_1_and_12": "bookend - the dream opens the deck, the measured thing answers it"
+    },
+    "showpiece": "slide 1 (cold open)",
+    "categories": {
+      "pictures": [
+        1,
+        3,
+        5,
+        8,
+        9,
+        11,
+        12
+      ],
+      "diagram": [
+        2
+      ],
+      "charts": [
+        4,
+        6,
+        7,
+        10
+      ],
+      "typography": [
+        13
+      ]
+    },
+    "source_isolation": "verified by zoom before generating: only notebooklm_source.md + revised slide_division.md ticked; superseded slide-division source removed from the notebook",
+    "narration": "unchanged - narration_script.md and its 992.3s timing reused; TTS cache expected to hit",
+    "deck_artifact": "Singularity Audit 2026 (2)",
+    "revise_passes": 1,
+    "revise_fixes": [
+      {
+        "slide": 8,
+        "defect": "white background, breaking the identical-style rule",
+        "outcome": "fixed"
+      },
+      {
+        "slide": 9,
+        "defect": "FRAMING ONLY - NOT EVIDENCE banner sat above the measurable-indicators bullet, inverting its meaning",
+        "outcome": "fixed"
+      },
+      {
+        "slide": 13,
+        "defect": "[S49] Acemoglu listed twice",
+        "outcome": "source list fixed, but the pass garbled the left column into nonsense and dropped the methodology and provenance lines"
+      }
+    ],
+    "local_image_substitutions": [
+      {
+        "slides": [
+          4,
+          6,
+          7,
+          10
+        ],
+        "what": "DATA CHART renders reused unchanged from charts/out_evocative/"
+      },
+      {
+        "slide": 13,
+        "what": "rendered locally by charts/render_slide13.py in the deck palette, after the Revise pass garbled it; every string copied verbatim from the slide 13 Data field",
+        "reason": "avoided a third whole-deck regeneration that would have risked the twelve correct slides"
+      }
+    ],
+    "fact_gate": "all 13 slides audited at native resolution; every number matches notebooklm_source.md or its chart CSV; all nine IMAGINED/REAL/MEASURED tags verified by zoom",
+    "artifacts": {
+      "spec": "slide_division.md",
+      "slides": "slides_evo2_clean/",
+      "captures": "captures_evo2/",
+      "pptx": "singularity_clean.pptx",
+      "slide13_renderer": "charts/render_slide13.py"
+    },
+    "tag_convention": {
+      "status": "removed at user request 2026-08-13",
+      "was": "IMAGINED / REAL / MEASURED monospace tags rendered into 9 places across 7 slides",
+      "method": "local removal, not a Revise pass (a Revise regenerates the whole deck and had already destroyed slide 13 in this run)",
+      "technique": "7 tags replaced by patch clone from adjacent matching texture; 2 (slide 9 upper, slide 11) rebuilt with a bilinear fit of the surrounding ring plus matched noise, because they sit on gradients where cloning imported a neighbouring object",
+      "script": "charts/strip_tags.py",
+      "pristine_copy": "slides_evo2_clean_tagged/",
+      "spec_updated": "slide_division.md style block, Visual paragraphs, run notes and generation prompt no longer instruct any in-image text; REAL/IMAGINED retained only as the two picture-kind names",
+      "residual": "slide 9 upper and slide 11 show a faint soft rectangle on close inspection; no text and no imported objects"
+    }
   }
 }
