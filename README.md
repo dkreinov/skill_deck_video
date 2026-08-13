@@ -132,7 +132,8 @@ Optional, for **auto mode** (agent drives Gemini Notebook end-to-end):
 
 ```
 Phase 0   Intake      one batched round (AskUserQuestion): question, approach,
-                       epistemic posture, audience, format, scope, permissions
+                       epistemic posture, audience, format, scope, permissions,
+                       visual register (paper / editorial / evocative)
           Run setup    init_research_run.py writes run_manifest.json +
                        placeholders; create a fresh per-project notebook
 Phase 1   Research     source-grounded: drill sources two levels deep,

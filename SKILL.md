@@ -86,6 +86,8 @@ Ask ONE batched round (AskUserQuestion) covering these seven fields:
 - Delivery format and length
 - Scope and time boundary
 - Research permissions and extras
+- Visual register — paper / editorial / evocative (how visually ambitious
+  the slides should be; see `references/visual-style.md`)
 
 For the full sub-questions and modes behind each field, see
 `references/research-modes.md`. "your call" is accepted as an answer for

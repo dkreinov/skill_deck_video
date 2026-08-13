@@ -197,6 +197,50 @@ rather than fighting it slide by slide. Last resort for a single stubborn
 slide: capture it, edit the image outside NotebookLM, and substitute it in
 the rebuilt PPTX — the same path the DATA CHART replacements use.
 
+## Visual register (asked at Phase 0)
+
+The Phase 0 intake asks how visually ambitious the deck should be. The
+register moves three things only: the share of slides carrying a picture,
+how ambitious those pictures are, and the style vocabulary. It NEVER moves
+the Fact Gate, the DATA CHART rules, the anti-cliche bans, or the
+no-generator-rendered-numbers rule.
+
+| Register | Pictures | Typography-only | Character |
+|---|---|---|---|
+| paper | 0-15% of slides | up to 1/3 | working paper: type, charts, hairline diagrams; the deck the numbers would write for themselves |
+| editorial (default) | >= 1/3 | up to 1/3 | magazine: a real picture per act, strong type, charts where numbers matter |
+| evocative | >= 1/2 | up to 1/4 | documentary film: pictures carry the feeling of the subject, scale contrasts, one showpiece slide |
+
+Record the chosen register in `run_manifest.json` (`intake.answers`) and
+name it in the deck's Global visual direction block, because it changes what
+the generation prompt should ask for.
+
+### What "wonder" is allowed to mean
+
+Evocative does not mean science fiction, and it is not a licence to reopen
+the banned-fluff list. The rule:
+
+**Wonder comes from the real at scale, never from the imagined.**
+
+The awe in a serious subject lives in physical fact — the size of the
+infrastructure, the smallness of the feature, the length of the timescale,
+the density of the thing nobody pictures. So: a cooling hall receding into
+the dark; a transformer yard at dusk; a wafer stepper's optics; a queue of
+identical racks; a coastline of turbines; the night side of a continent lit
+by load. Never: a glowing brain, a humanoid robot, a hologram, a neon
+"digital future" cityscape. Those are imagined wonder, and they read as
+slop precisely because they are.
+
+Three levers make a real image feel large: **scale contrast** (a person-sized
+object against a landscape-sized one), **light** (a single source in a dark
+field, dawn, sodium, screen glow), and **depth** (something receding past
+where the eye can resolve it). Name at least one of them in the Visual
+paragraph.
+
+The register also sets how much of the deck is showpiece: at evocative,
+pick ONE slide — usually the cold open or the verdict — and give it the
+deck's most ambitious image.
+
 ## The variety floor: earn the images
 
 The banned-fluff list says what not to draw. It is not a licence to draw
@@ -204,7 +248,8 @@ nothing. An abstract subject (a trend, a risk, a definition) is exactly the
 case where a reader needs something to look at, and "no imagery at all" is
 the failure mode this guide must prevent as firmly as the glowing brain.
 
-Minimum for any deck of ~10+ slides:
+Minimum for any deck of ~10+ slides, at the DEFAULT editorial register
+(paper and evocative shift the first two numbers per the register table):
 
 - **At least a third of the slides carry a real picture** — a scene, an
   object, a place, a process rendered as something you could photograph or
@@ -212,7 +257,8 @@ Minimum for any deck of ~10+ slides:
   pure typography do NOT count toward this third.
 - **At most one third pure typography** (large-type quote or verdict
   slides). Two or three in a 13-slide deck is plenty.
-- **No three consecutive slides without a picture.**
+- **No three consecutive slides without a picture** (all registers,
+  including paper).
 
 "Evidence, not decoration" governs WHAT an image shows, not whether an
 image exists. An image is evidence when it makes the claim legible: the
