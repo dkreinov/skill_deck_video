@@ -423,10 +423,14 @@ def check_chart_warn(run_dir, findings):
 
 
 NUM_TOKEN_RE = re.compile(r"\d+\.\d+|\d+")
+# Citation markers such as [S64], [S01, S02] or a bare C12 are IDs, not data.
+CITE_ID_RE = re.compile(r"\[(?:\s*[SC]\d{2,}\s*,?)+\]"
+                        r"|(?<![A-Za-z0-9])[SC]\d{2,}(?![A-Za-z0-9])")
 
 
 def extract_numeric_tokens(text):
     tokens = []
+    text = CITE_ID_RE.sub(" ", text)
     for m in NUM_TOKEN_RE.finditer(text):
         numstr = m.group(0)
         try:
