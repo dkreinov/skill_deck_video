@@ -256,6 +256,8 @@ same titles, one slide each:
 1. <title> ... N. <title>
 For each slide use the matching "Data" and "Visual" descriptions from the
 Slide Division source. Keep text minimal: key message + max 3 bullets per slide.
+House style for EVERY slide: <paste the Global visual direction block from
+slide_division.md verbatim, including its standing ban line>.
 ```
 
 ### Source isolation (hard gate)
@@ -298,6 +300,10 @@ where text is small), and run the full Fact Gate on the screenshots — no files
 needed. Then click **Revise**, select each failing slide, enter its instruction
 (form_input on the "Revision instructions" textbox), let them batch under
 "Pending changes", and **Generate revised deck**. Re-audit the changed slides.
+After the content pass is clean, run a second, AESTHETICS Revise pass per
+`references/visual-style.md` (concrete deltas: remove garnish, enforce the
+single accent, one soft-white body color, add whitespace), then re-run the
+content check on every revised slide — Revise can alter text while restyling.
 
 **Native-resolution capture (replaces the download entirely):** the slide PNGs
 live on auth-gated lh3.googleusercontent URLs (session-cookie-only; curl gets a

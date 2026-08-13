@@ -109,8 +109,9 @@ it is fluff. A good visual only makes sense for THIS slide's claim.
   no dual axes, no pies beyond 4 slices (prefer sorted bars). Bar-chart
   value axes start at zero. Time series → line; comparisons → sorted bars.
 - Grey everything, accent the one series or point that carries the message;
-  use the deck's style-block colors in the render code so charts and
-  generated slides read as one system.
+  the render code takes ALL its colors from the style block (deck
+  background, one neutral, the accent) — never matplotlib/plotly defaults,
+  or the chart reads as pasted-on instead of part of the deck.
 
 ### Illustration
 
@@ -127,6 +128,70 @@ it is fluff. A good visual only makes sense for THIS slide's claim.
   read every word and digit.
 - Metaphor is allowed only when the mapping is stated in the paragraph; an
   unstated metaphor is decoration.
+
+## Driving NotebookLM to pretty slides (house-style countermeasures)
+
+NotebookLM composes the whole slide — layout, type, and artwork — from your
+text. Left unsteered it has a house style, and the house style is the main
+reason decks come out "not pretty". Observed tells and their countermeasures
+(verified on a real 13-slide run, 2026-08-13):
+
+- **Monochrome wash.** With no accent declared, everything renders pale
+  blue-on-navy at one value — no hierarchy, nothing pops. Countermeasure:
+  the style block NAMES one accent family ("warm amber", "electric coral")
+  and says everything else stays monochrome; each slide's Visual names the
+  ONE element that gets it.
+- **Schematic garnish.** Style words like "technical", "scientific",
+  "blueprint", "schematic", "HUD" summon frame borders around the slide,
+  corner crosses, tick clusters, measurement marks, dashed boxes, particle
+  speckles, and smudged micro-text debris at the edges. Countermeasure:
+  never use those style words; use "minimal editorial", "flat matte",
+  "generous whitespace"; AND append the explicit ban (next bullet).
+- **The standing ban line** — include it verbatim in the style block and in
+  the deck-generation prompt: "No frame or border around the slide, no
+  corner crosses, no tick marks, no measurement marks, no scattered
+  speckles or particle dust, no dashed outline boxes, no stray small text
+  or numbers at the edges, no gradients inside shapes — flat solid fills."
+- **Rainbow text and rainbow boxes.** Multi-item lists come back with each
+  item's border a different color and words colorized mid-sentence.
+  Countermeasure: "all body text in a single soft-white; all boxes share
+  one neutral outline; color marks meaning only" — and never write a Visual
+  that asks for "a different colour per item".
+- **Wall-to-wall layouts.** Dense Data fields produce zero-whitespace
+  slides. Countermeasure: demand "at least one third of the slide empty"
+  and name a single hero element per slide; move detail to narration.
+- **DATA CHART palette drift.** Locally rendered charts default to
+  matplotlib grey/blue/orange and look pasted-on. Countermeasure: the chart
+  render code takes its colors FROM the style block — deck background, one
+  neutral for context series, the accent only on the message; soft-white
+  labels; no default palettes.
+
+Carry the style INTO generation: the Phase 2 outline-paste prompt includes
+the Global visual direction block verbatim (see the SKILL.md Phase 2
+template). Slides styled per-slide without a deck-level style paragraph will
+not cohere, no matter how good each Visual is.
+
+## The Revise aesthetics pass
+
+Revise is not only for fact fixes — run TWO passes over the generated deck:
+
+1. **Content pass (Fact Gate):** numbers, names, orders, garbled text,
+   brands — fix, regenerate, re-audit. This pass comes first; there is no
+   point beautifying a slide whose content will change.
+2. **Aesthetics pass:** walk every slide against this guide and batch
+   visual-only Revise instructions. Write them as concrete deltas, 1-3 per
+   slide, naming what to remove / recolor / resize — never "make it
+   prettier":
+   - "Remove the frame, corner crosses, tick marks and speckles; clean
+     solid background."
+   - "Make all five boxes the same slate-grey outline; recolor only box 3
+     to the warm amber accent."
+   - "Set all body text in one soft-white; remove the multicolored words."
+   - "Enlarge the headline; add empty margin around the diagram."
+   Batch them under Pending changes, regenerate once, then re-run the
+   CONTENT check on every revised slide (Revise can alter text while
+   restyling). Two aesthetics rounds is the norm; stop when the deck passes
+   the glance test, not when it is perfect.
 
 ## Deck-level rhythm
 
