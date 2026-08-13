@@ -27,13 +27,16 @@ signal-to-noise (Reynolds), and the data-ink ratio (Tufte).
 At the top of `slide_division.md`, before slide 1, write a
 `**Global visual direction:**` block that fixes, for the whole deck:
 
-- background value (e.g. near-black editorial dark, or warm paper light);
+- one named visual genre for the whole deck;
+- background value (e.g. near-black editorial dark, or warm paper light) —
+  hex codes beat adjectives;
 - one or two neutrals + ONE accent color, and the accent's MEANING — the
   accent marks the single thing that matters on each slide, nothing else;
 - typography mood (e.g. large light serif for quotes, small mono for data);
 - rendering style (e.g. "flat matte, vector-like, no gloss, no 3D");
 - the standing bans (see the fluff list below), stated explicitly so the
-  generator prompt inherits them.
+  generator prompt inherits them;
+- the closing line "Keep this style identical across all slides."
 
 Then every Visual paragraph reuses the same vocabulary ("dark field", "the
 warm accent") instead of re-inventing colors per slide. Consistency across
@@ -129,69 +132,68 @@ it is fluff. A good visual only makes sense for THIS slide's claim.
 - Metaphor is allowed only when the mapping is stated in the paragraph; an
   unstated metaphor is decoration.
 
-## Driving NotebookLM to pretty slides (house-style countermeasures)
+## NotebookLM: style is set ONCE, in the generation prompt
 
-NotebookLM composes the whole slide — layout, type, and artwork — from your
-text. Left unsteered it has a house style, and the house style is the main
-reason decks come out "not pretty". Observed tells and their countermeasures
-(verified on a real 13-slide run, 2026-08-13):
+Slides render as finished images; there is no post-hoc theming. "Any design
+direction you don't put in the prompt is design direction you don't get."
+Google officially supports full aesthetic direction in the customization
+prompt — their own examples include a chalkboard design with colored chalk
+text and brand styling pulled from an uploaded brandbook. The Global visual
+direction block therefore IS the style paragraph of the Phase 2 generation
+prompt (the SKILL.md template pastes it verbatim). Write it to be obeyed:
 
-- **Monochrome wash.** With no accent declared, everything renders pale
-  blue-on-navy at one value — no hierarchy, nothing pops. Countermeasure:
-  the style block NAMES one accent family ("warm amber", "electric coral")
-  and says everything else stays monochrome; each slide's Visual names the
-  ONE element that gets it.
-- **Schematic garnish.** Style words like "technical", "scientific",
-  "blueprint", "schematic", "HUD" summon frame borders around the slide,
-  corner crosses, tick clusters, measurement marks, dashed boxes, particle
-  speckles, and smudged micro-text debris at the edges. Countermeasure:
-  never use those style words; use "minimal editorial", "flat matte",
-  "generous whitespace"; AND append the explicit ban (next bullet).
-- **The standing ban line** — include it verbatim in the style block and in
-  the deck-generation prompt: "No frame or border around the slide, no
-  corner crosses, no tick marks, no measurement marks, no scattered
-  speckles or particle dust, no dashed outline boxes, no stray small text
-  or numbers at the edges, no gradients inside shapes — flat solid fills."
-- **Rainbow text and rainbow boxes.** Multi-item lists come back with each
-  item's border a different color and words colorized mid-sentence.
-  Countermeasure: "all body text in a single soft-white; all boxes share
-  one neutral outline; color marks meaning only" — and never write a Visual
-  that asks for "a different colour per item".
-- **Wall-to-wall layouts.** Dense Data fields produce zero-whitespace
-  slides. Countermeasure: demand "at least one third of the slide empty"
-  and name a single hero element per slide; move detail to narration.
-- **DATA CHART palette drift.** Locally rendered charts default to
-  matplotlib grey/blue/orange and look pasted-on. Countermeasure: the chart
-  render code takes its colors FROM the style block — deck background, one
-  neutral for context series, the accent only on the message; soft-white
-  labels; no default palettes.
+- Name ONE coherent visual genre ("minimal editorial", "blackboard",
+  "modern newspaper", "constructivist poster") — never two; mixed visual
+  languages fragment the deck.
+- Prefer exact values over adjectives: hex codes for background / neutral /
+  accent, a named font family or type mood, quantified emphasis when it
+  matters ("headline 10x body size").
+- ONE accent color with a stated meaning, and explicit bans — the model
+  obeys prohibitions ("no gradients, no shadows, no frames or border
+  decoration, no clip-art").
+- End with: "Keep this style identical across all slides."
+- Add: "Reference only concepts explicitly present in the sources."
+- Brand deck? Upload the brandbook / style guide as a notebook source and
+  point the prompt at it.
 
-Carry the style INTO generation: the Phase 2 outline-paste prompt includes
-the Global visual direction block verbatim (see the SKILL.md Phase 2
-template). Slides styled per-slide without a deck-level style paragraph will
-not cohere, no matter how good each Visual is.
+The division of labor that keeps a deck coherent (confirmed by comparing a
+good and a poor real run side by side):
 
-## The Revise aesthetics pass
+- **Deck-level prompt** — ALL palette, typography, mood, and bans live here.
+- **Per-slide Visual** — a short, positive, concrete SCENE: what to draw
+  and what it encodes (25-60 words). Reuse the style block's vocabulary
+  ("the accent"); never assign new colors per slide and never stack
+  negatives per slide — per-slide art direction is how a deck ends up
+  looking like thirteen different decks.
+- **Data field** — thin. On-slide text density tracks what you put in Data,
+  not the "keep text minimal" instruction; long evidence bullets come back
+  as wall-to-wall text. Move detail to narration.
+- **DATA CHART replacements** — locally rendered charts draw from the same
+  style block (background, neutral, accent), or the deck alternates between
+  two visual systems.
 
-Revise is not only for fact fixes — run TWO passes over the generated deck:
+## Revise: per-slide fixes for concrete defects
 
-1. **Content pass (Fact Gate):** numbers, names, orders, garbled text,
-   brands — fix, regenerate, re-audit. This pass comes first; there is no
-   point beautifying a slide whose content will change.
-2. **Aesthetics pass:** walk every slide against this guide and batch
-   visual-only Revise instructions. Write them as concrete deltas, 1-3 per
-   slide, naming what to remove / recolor / resize — never "make it
-   prettier":
-   - "Remove the frame, corner crosses, tick marks and speckles; clean
-     solid background."
-   - "Make all five boxes the same slate-grey outline; recolor only box 3
-     to the warm amber accent."
-   - "Set all body text in one soft-white; remove the multicolored words."
-   - "Enlarge the headline; add empty margin around the diagram."
-   Batch them under Pending changes, regenerate once, then re-run the
-   CONTENT check on every revised slide (Revise can alter text while
-   restyling). Two aesthetics rounds is the norm; stop when the deck passes
-   the glance test, not when it is perfect.
+Revise (pencil icon on the deck) opens a per-slide instruction box;
+instructions batch under "Pending changes" and apply with one "Generate
+revised deck". Use it for CONCRETE defects found in review:
+
+- a wrong or invented number, name, or order — state the correct value
+  verbatim in the instruction, because revisions do NOT consult the
+  notebook sources;
+- an image that missed its Visual spec or drew a banned element;
+- garbled or unwanted words inside artwork; brand lookalikes;
+- a specific visual delta ("remove the border decoration on this slide",
+  "make only the third box the accent color").
+
+Mechanism facts to plan around: every revision pass regenerates the WHOLE
+deck — batch all slide instructions into as few passes as possible, and
+re-check untouched slides after each pass (they can shift). Revise cannot
+add or remove slides. If the same style fault appears on every slide, the
+generation prompt was wrong: fix the prompt and regenerate the deck once
+rather than fighting it slide by slide. Last resort for a single stubborn
+slide: capture it, edit the image outside NotebookLM, and substitute it in
+the rebuilt PPTX — the same path the DATA CHART replacements use.
 
 ## Deck-level rhythm
 
@@ -206,8 +208,9 @@ Revise is not only for fact fixes — run TWO passes over the generated deck:
 ## Writing the Visual paragraph — formula
 
 `**CATEGORY.** [style-block tag] + [composition: what, where, how sized] +
-[what each element encodes] + [negative constraints if the subject is
-risky]` — 40–90 words.
+[what each element encodes] + [a negative constraint only if the subject is
+risky]` — 25–60 words, positive scene description. Style, palette, and the
+standing bans live in the deck-level prompt, not here.
 
 Good (from the shipped example): "**DIAGRAM.** A clean horizontal timeline
 spanning May to August, with circular markers sized proportionally to
@@ -218,3 +221,18 @@ vector, dark background, warm accent for the two largest markers."
 Bad: "A glowing brain with circuit patterns representing AI progress,
 cinematic 8k" — decoration not evidence, banned cliché, portability-test
 failure, style filler, nothing encoded.
+
+## Sources
+
+Slide-design research: Alley's assertion-evidence studies (Penn State),
+Duarte's glance test, Reynolds' signal-to-noise, Tufte's data-ink ratio.
+NotebookLM specifics: Google's Slide Deck help
+(support.google.com/notebooklm/answer/16757456) and "8 ways to make the
+most of Slide Decks" (blog.google), which document aesthetic direction in
+the customization prompt and brandbook-as-source; community prompt
+libraries (github.com/serenakeyitan/awesome-notebookLM-prompts,
+sabrina.dev, excellentprompts.substack.com) for hex-over-adjectives,
+named-genre recipes, and the identical-across-slides directive; Revise
+mechanics per Google help and 2026 practitioner guides. Division-of-labor
+rules confirmed by a side-by-side comparison of two real runs of this
+skill (one coherent, one fragmented).

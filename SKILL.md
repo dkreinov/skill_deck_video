@@ -300,10 +300,12 @@ where text is small), and run the full Fact Gate on the screenshots — no files
 needed. Then click **Revise**, select each failing slide, enter its instruction
 (form_input on the "Revision instructions" textbox), let them batch under
 "Pending changes", and **Generate revised deck**. Re-audit the changed slides.
-After the content pass is clean, run a second, AESTHETICS Revise pass per
-`references/visual-style.md` (concrete deltas: remove garnish, enforce the
-single accent, one soft-white body color, add whitespace), then re-run the
-content check on every revised slide — Revise can alter text while restyling.
+Batch all slide instructions into as few Revise passes as possible — each
+pass regenerates the WHOLE deck, so re-check untouched slides too; revisions
+do not consult the sources, so state corrected facts verbatim in the
+instruction. A style fault repeating on every slide means the generation
+prompt was wrong: fix the prompt and regenerate once, per
+`references/visual-style.md`.
 
 **Native-resolution capture (replaces the download entirely):** the slide PNGs
 live on auth-gated lh3.googleusercontent URLs (session-cookie-only; curl gets a
