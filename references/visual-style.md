@@ -122,9 +122,11 @@ it is fluff. A good visual only makes sense for THIS slide's claim.
   outperforms a metaphor ("a stack of text posts compressed to thin
   horizontal lines, seen edge-on" beats "a concept of communication").
 - Abstract-geometric compositions — line fields, grids, edge-on timelines,
-  large flat color planes in the deck's own palette — are the safest way to
-  be visually interesting: no garbled text, no uncanny anatomy, strong at a
-  glance.
+  large flat color planes in the deck's own palette — are the SAFE option:
+  no garbled text, no uncanny anatomy, strong at a glance. Safe is not the
+  same as good. A deck built only from hairlines, ticks and rules is
+  correct and forgettable; use them for the connective slides, not for all
+  of them.
 - **Typography-as-image** (a full-bleed quote or a single huge number with
   enormous margins) is often the strongest slide in the deck; use one or
   two. These ARE rendered text, so keep them short and have the Fact Gate
@@ -195,10 +197,53 @@ rather than fighting it slide by slide. Last resort for a single stubborn
 slide: capture it, edit the image outside NotebookLM, and substitute it in
 the rebuilt PPTX — the same path the DATA CHART replacements use.
 
+## The variety floor: earn the images
+
+The banned-fluff list says what not to draw. It is not a licence to draw
+nothing. An abstract subject (a trend, a risk, a definition) is exactly the
+case where a reader needs something to look at, and "no imagery at all" is
+the failure mode this guide must prevent as firmly as the glowing brain.
+
+Minimum for any deck of ~10+ slides:
+
+- **At least a third of the slides carry a real picture** — a scene, an
+  object, a place, a process rendered as something you could photograph or
+  draw, not a hairline abstraction. Charts, tick-marks, rules, arrows and
+  pure typography do NOT count toward this third.
+- **At most one third pure typography** (large-type quote or verdict
+  slides). Two or three in a 13-slide deck is plenty.
+- **No three consecutive slides without a picture.**
+
+"Evidence, not decoration" governs WHAT an image shows, not whether an
+image exists. An image is evidence when it makes the claim legible: the
+concrete instance behind an abstraction (the actual bottleneck: a
+substation, a transformer yard, a cooling hall), the physical object a
+number describes, the scene a scenario would look like. It is decoration
+when any deck could use it.
+
+Finding a picture for an abstract claim — the drill:
+
+1. Name the most concrete noun in the claim. "Compute is constrained" →
+   transformers, substations, cooling. "Automation of research" → a bench,
+   a terminal, a queue of experiments.
+2. Put that noun in a real place, at a stated scale, with the deck's
+   palette and lighting: "a row of grid transformers behind chain-link at
+   dusk, seen from a low angle, near-black sky, the deck's amber only in
+   the sodium lamps."
+3. Say what the picture encodes ("the queue is the wait, not the machine").
+4. Add the risky-subject constraints (generic/unbranded, no readable text,
+   no faces) — the same specificity that avoids stock clichés is what makes
+   the image striking.
+
+If a scene genuinely cannot be found for a claim, that slide is a
+typography or diagram slide — but the deck as a whole must still clear the
+floor above.
+
 ## Deck-level rhythm
 
 - Vary the species: never three consecutive slides of the same category. A
-  strong deck alternates diagram / chart / typography / illustration.
+  strong deck alternates diagram / chart / typography / illustration, and
+  clears the variety floor above — count the categories before generating.
 - The cold open and the takeaway slide get the boldest treatment (full-bleed
   typography or the deck's single most striking composition).
 - Report-video decks: the measurement-dashboard beat is DATA CHART
