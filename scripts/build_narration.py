@@ -6,19 +6,37 @@ block body is the spoken text. Slide images: slide_01.png, slide_02.png, ... in
 slides_dir (use render_review.py to produce them). Each slide is shown for
 lead + measured-narration + tail seconds — sync is correct by construction.
 
+Engines:
+  edge        — Microsoft edge-tts neural voices, free/unlimited (default)
+  elevenlabs  — ElevenLabs REST API; needs a key (--key-file or
+                ELEVENLABS_API_KEY). Free tier: premade voices only, 10k
+                chars/month. Segments are cached by text hash, so edits
+                re-bill only the changed slides.
+
 Usage:
   python build_narration.py narration_script.md slides_dir out.mp4
-         [--voice en-US-AndrewMultilingualNeural] [--rate -4%]
+         [--lang en] [--voice V] [--rate -4%] [--engine edge|elevenlabs]
+         [--model eleven_v3] [--key-file path] [--max-chars 10000]
          [--lead 0.6] [--tail 1.0] [--workdir build]
-  python build_narration.py --samples narration_script.md   # 3-voice audition
+  python build_narration.py --samples narration_script.md --lang he
+         # audition every mapped voice for that language (edge engine only)
 """
-import argparse, asyncio, glob, hashlib, os, re, subprocess, sys
+import argparse, asyncio, glob, hashlib, json, os, re, subprocess, sys
+import urllib.request
 
-VOICES = {
-    "andrew": "en-US-AndrewMultilingualNeural",
-    "ava": "en-US-AvaMultilingualNeural",
-    "brian": "en-US-BrianMultilingualNeural",
+# Per-language edge-tts voices (male/female pairs; first entry = default).
+# More: python -m edge_tts --list-voices | grep -i <code>
+LANG_VOICES = {
+    "en": ["en-US-AndrewMultilingualNeural", "en-US-AvaMultilingualNeural",
+           "en-US-BrianMultilingualNeural"],
+    "he": ["he-IL-AvriNeural", "he-IL-HilaNeural"],
+    "ar": ["ar-EG-ShakirNeural", "ar-EG-SalmaNeural", "ar-SA-HamedNeural"],
+    "ru": ["ru-RU-DmitryNeural", "ru-RU-SvetlanaNeural"],
+    "de": ["de-DE-ConradNeural", "de-DE-KatjaNeural"],
+    "fr": ["fr-FR-HenriNeural", "fr-FR-DeniseNeural"],
+    "es": ["es-ES-AlvaroNeural", "es-ES-ElviraNeural"],
 }
+ELEVENLABS_DEFAULT_VOICE = "EXAVITQu4vr4xnSDxMaL"  # Sarah (premade, free tier)
 
 
 def parse_script(path):
@@ -49,9 +67,40 @@ def dur(ff, path):
     return int(h) * 3600 + int(mn) * 60 + float(s)
 
 
-async def tts(text, voice, rate, out):
+async def edge_tts_save(text, voice, rate, out):
     import edge_tts
     await edge_tts.Communicate(text, voice, rate=rate).save(out)
+
+
+def elevenlabs_key(key_file):
+    if key_file:
+        return open(key_file, encoding="utf-8").read().strip()
+    key = os.environ.get("ELEVENLABS_API_KEY", "").strip()
+    if not key:
+        sys.exit("elevenlabs engine needs --key-file or ELEVENLABS_API_KEY")
+    return key
+
+
+def elevenlabs_tts(text, voice, model, key, out):
+    req = urllib.request.Request(
+        f"https://api.elevenlabs.io/v1/text-to-speech/{voice}",
+        data=json.dumps({"text": text, "model_id": model}).encode("utf-8"),
+        headers={"xi-api-key": key, "Content-Type": "application/json"})
+    try:
+        audio = urllib.request.urlopen(req).read()
+    except urllib.error.HTTPError as e:
+        # 402 on library voices (free tier is premade-only) and 401 on cloned
+        # voices without a paid plan are the common failures; neither bills.
+        sys.exit(f"elevenlabs HTTP {e.code}: {e.read().decode(errors='replace')[:300]}")
+    with open(out, "wb") as f:
+        f.write(audio)
+
+
+def render_segment(a, text, key, out):
+    if a.engine == "elevenlabs":
+        elevenlabs_tts(text, a.voice, a.model, key, out)
+    else:
+        asyncio.run(edge_tts_save(text, a.voice, a.rate, out))
 
 
 def main():
@@ -59,25 +108,47 @@ def main():
     ap.add_argument("script")
     ap.add_argument("slides_dir", nargs="?")
     ap.add_argument("out", nargs="?")
-    ap.add_argument("--voice", default=VOICES["andrew"])
-    ap.add_argument("--rate", default="-4%")
+    ap.add_argument("--lang", default="en",
+                    help="narration language code; picks the default voice "
+                         f"({', '.join(LANG_VOICES)})")
+    ap.add_argument("--voice", default=None,
+                    help="edge-tts voice name, or ElevenLabs voice ID")
+    ap.add_argument("--rate", default="-4%", help="edge engine only")
+    ap.add_argument("--engine", choices=["edge", "elevenlabs"], default="edge")
+    ap.add_argument("--model", default="eleven_v3",
+                    help="elevenlabs model (eleven_v3 is the Hebrew-capable one)")
+    ap.add_argument("--key-file", default=None,
+                    help="file whose only line is the ElevenLabs API key")
+    ap.add_argument("--max-chars", type=int, default=10000,
+                    help="refuse to send more than this many NEW (uncached) chars "
+                         "to elevenlabs; 0 = unlimited")
     ap.add_argument("--lead", type=float, default=0.6)
     ap.add_argument("--tail", type=float, default=1.0)
     ap.add_argument("--workdir", default="build")
     ap.add_argument("--pad-color", default="0x1b2635",
                     help="letterbox color behind non-16:9 slides")
     ap.add_argument("--samples", action="store_true",
-                    help="write voice_sample_{andrew,ava,brian}.mp3 of slide 2 and exit")
+                    help="write voice samples of slide 2 for --lang and exit (edge only)")
     a = ap.parse_args()
+
+    if a.lang not in LANG_VOICES and not a.voice:
+        sys.exit(f"no voice map for --lang {a.lang}; pass --voice explicitly "
+                 "(python -m edge_tts --list-voices)")
+    if not a.voice:
+        a.voice = ELEVENLABS_DEFAULT_VOICE if a.engine == "elevenlabs" \
+            else LANG_VOICES[a.lang][0]
 
     lines = parse_script(a.script)
     os.makedirs(a.workdir, exist_ok=True)
 
     if a.samples:
+        if a.engine == "elevenlabs":
+            sys.exit("--samples is edge-only (elevenlabs samples cost credits; "
+                     "audition voices at elevenlabs.io instead)")
         probe = lines[1] if len(lines) > 1 else lines[0]
-        for name, v in VOICES.items():
-            out = os.path.join(a.workdir, f"voice_sample_{name}.mp3")
-            asyncio.run(tts(probe, v, a.rate, out))
+        for v in LANG_VOICES.get(a.lang, [a.voice]):
+            out = os.path.join(a.workdir, f"voice_sample_{v}.mp3")
+            asyncio.run(edge_tts_save(probe, v, a.rate, out))
             print("sample:", out)
         return
 
@@ -86,14 +157,31 @@ def main():
     slides = sorted(glob.glob(os.path.join(a.slides_dir, "slide_*.png")))
     assert len(slides) == len(lines), f"{len(slides)} slides vs {len(lines)} script blocks"
 
+    key = elevenlabs_key(a.key_file) if a.engine == "elevenlabs" else None
+
+    # hash engine+voice+model+rate+text into the cache name so edited narration
+    # (or a changed voice) regenerates audio — and unchanged slides never re-bill
+    def seg_path(i, text):
+        stamp = f"{a.engine}|{a.voice}|{a.model if a.engine == 'elevenlabs' else a.rate}|{text}"
+        h = hashlib.sha1(stamp.encode("utf-8")).hexdigest()[:10]
+        return os.path.join(a.workdir, f"seg_{i:02d}_{h}.mp3")
+
+    if a.engine == "elevenlabs":
+        new_chars = sum(len(t) for i, t in enumerate(lines, 1)
+                        if not os.path.exists(seg_path(i, t)))
+        cached = len(lines) - sum(1 for i, t in enumerate(lines, 1)
+                                  if not os.path.exists(seg_path(i, t)))
+        print(f"elevenlabs: {new_chars} new chars to bill ({cached} segments cached)")
+        if a.max_chars and new_chars > a.max_chars:
+            sys.exit(f"refusing: {new_chars} chars exceeds --max-chars {a.max_chars} "
+                     "(raise the cap explicitly if the credits are available)")
+
     ff = ffmpeg()
     segs = []
     for i, (text, png) in enumerate(zip(lines, slides), 1):
-        # hash text into the cache name so edited narration regenerates audio
-        h = hashlib.sha1((a.voice + a.rate + text).encode("utf-8")).hexdigest()[:10]
-        mp3 = os.path.join(a.workdir, f"seg_{i:02d}_{h}.mp3")
+        mp3 = seg_path(i, text)
         if not os.path.exists(mp3):
-            asyncio.run(tts(text, a.voice, a.rate, mp3))
+            render_segment(a, text, key, mp3)
         d = dur(ff, mp3)
         total = a.lead + d + a.tail
         seg = os.path.join(a.workdir, f"vseg_{i:02d}.mp4")

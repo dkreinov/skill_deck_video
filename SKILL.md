@@ -85,7 +85,8 @@ Ask ONE batched round (AskUserQuestion) covering these seven fields:
 - Research/editorial approach
 - Epistemic posture
 - Audience and desired takeaway
-- Delivery format and length
+- Delivery format and length (including narration language — slides may stay
+  English while the narration is Hebrew/Russian/German/...; see Phase 4)
 - Scope and time boundary
 - Research permissions and extras
 - Visual register — paper / editorial / evocative (how visually ambitious
@@ -385,12 +386,59 @@ pixel edits.
   Spoken register: full sentences, transitions between slides, spell out technical
   tokens ("network dot json"), ~2–3 sentences (~20–30s) per slide. Fact Gate applies.
 - Voice: edge-tts neural voices; default `en-US-AndrewMultilingualNeural` at rate -4%.
-  Offer samples: `python scripts/build_narration.py --samples narration_script.md`
-  writes one test line in Andrew/Ava/Brian for the user to audition. Only script
-  text leaves the machine.
+  Offer samples: `python scripts/build_narration.py --samples narration_script.md
+  [--lang he]` writes one test line per mapped voice for the user to audition.
+  Only script text leaves the machine.
 - Build: `python scripts/build_narration.py script.md slides_dir out.mp4
-  [--voice V] [--lead 0.6] [--tail 1.0]` — per-slide TTS, measured durations size
-  each slide's screen time (sync correct by construction), 1080p, concat.
+  [--lang X] [--voice V] [--engine edge|elevenlabs] [--lead 0.6] [--tail 1.0]` —
+  per-slide TTS, measured durations size each slide's screen time (sync correct
+  by construction), 1080p, concat. Segments are cached by a hash of
+  engine+voice+text, so editing one slide's narration re-renders only that slide.
+
+### Non-English narration (Hebrew, Russian, German, Arabic, ...)
+
+Slides stay in the deck's language (usually English); only the narration
+changes. Rules, learned the hard way on Hebrew runs:
+
+- **Write the script natively in the target language — never translate the
+  English script.** Same per-slide teaching intent, but phrasing born in that
+  language; translated narration sounds translated. The Fact Gate applies
+  unchanged.
+- **The writing and its review are strong-model work.** Small/cheap models
+  produce fluent-LOOKING low-resource-language text containing invented words
+  (observed: "ציודיות" for "ייחודיות"); no mechanical check catches this. The
+  script must be written by a strong model AND re-read sentence-by-sentence by
+  a fresh strong reviewer before any TTS renders it.
+- **Decide a transliteration glossary BEFORE writing.** TTS voices mangle
+  embedded Latin acronyms and digits inside non-Latin text. Fix each recurring
+  technical term once (e.g. DLO → די-אל-או, EyeQ7 → איי-קיו שבע), spell numbers
+  as words, and apply the glossary on every occurrence.
+- Voices: `--lang he|ar|ru|de|fr|es` picks a mapped edge-tts voice
+  (he: Avri/Hila, ar: Shakir/Salma/Hamed, ru: Dmitry/Svetlana,
+  de: Conrad/Katja...); any other language: find one with
+  `python -m edge_tts --list-voices` and pass `--voice`. Arabic voices speak
+  MSA — fine for narration; and Arabic shares Hebrew's vowel-ambiguity, so the
+  same glossary + fluency-review rules apply, not extra tooling.
+- RTL caveat: narration-only RTL is safe. If the user wants the SLIDES
+  themselves in an RTL language, treat NotebookLM's RTL text rendering as
+  unverified — render one test slide and inspect before committing to it.
+
+### ElevenLabs engine (premium voices)
+
+`--engine elevenlabs [--voice VOICE_ID] [--model eleven_v3] --key-file key.txt`
+— REST API, no SDK needed. Facts that matter:
+
+- Free tier: ~10k chars/month, **premade voices only** (library voices return
+  HTTP 402; instantly-cloned voices return 401 without a paid plan). Default
+  voice is Sarah. `eleven_v3` is the only Hebrew-capable model.
+- The key file must be gitignored; the script never prints the key. Failed
+  calls (401/402) do not bill.
+- Credit safety: the script prints the NEW (uncached) char count up front and
+  refuses above `--max-chars` (default 10000) — raise it explicitly only when
+  the credits are known to be available. The per-slide cache means a re-run
+  after editing slide 7 bills only slide 7.
+- A full 13-slide narration ≈ 4–5k chars ≈ half the free monthly quota; check
+  remaining credits before promising multiple renders in one month.
 - On report-video runs (see **Report-video mode** in Phase 1), the narration
   carries the reasoning of the report — definitions, evidence for and against,
   calibration — while slides stay visual. The Fact Gate applies unchanged: the
