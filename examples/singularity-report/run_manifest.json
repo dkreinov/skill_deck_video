@@ -1,0 +1,422 @@
+{
+  "project_title": "Are we approaching the technological singularity?",
+  "topic_slug": "are-we-approaching-the-technological",
+  "created_at": "2026-08-12T17:03:56.506333+00:00",
+  "as_of_date": "2026-08-12",
+  "forecast_horizon": "2035",
+  "central_question": "Is there measurable evidence that AI development is becoming self-accelerating, and does it bear on the claim that a technological singularity is approaching?",
+  "initial_hypothesis": "H1: some AI-capability/AI-production feedback loops may already be measurable, but their existence is not equivalent to a singularity.",
+  "approach_modes": [
+    "rigorous scientific evidence review",
+    "pop-science narrative",
+    "non-obvious weak signals",
+    "science-fiction framing (labelled, never evidence)"
+  ],
+  "epistemic_posture": "map the evidence without choosing a side initially",
+  "audience": "technically curious general audience",
+  "deliverables": [
+    "~15-min narrated report video (music + narrated-only variants)",
+    "fact-gated slide deck (PPTX)",
+    "narration script",
+    "research artifacts (brief, registry, matrix, checkpoint, pass reports)"
+  ],
+  "intake": {
+    "answers": {
+      "central_question_posture": "Map the evidence, pick no side",
+      "approach": [
+        "Rigorous scientific evidence review",
+        "Non-obvious weak signals",
+        "Pop-science narrative",
+        "Science-fiction framing"
+      ],
+      "audience_format": "Technically curious general audience, ~15 min, as-of 2026-08-12, horizon 2035",
+      "permissions": [
+        "Public-web Deep Research via NotebookLM",
+        "Generate music automatically (Suno)",
+        "Continue with no further checkpoints",
+        "Include a bibliography + provenance disclosure"
+      ]
+    },
+    "defaults_used": [
+      "neutral documentary tone",
+      "steelman the skeptical counter-case",
+      "current date as as-of date",
+      "12-18 min narrated report video length band"
+    ]
+  },
+  "notebook": {
+    "name": "2026-08-12 — are-we-approaching-the-technological — deck-video",
+    "url": "https://notebook.google.com/notebook/9dd44f48-70b6-4595-9c66-7153f6b85419",
+    "created_fresh": true,
+    "verified_empty_at_creation": true
+  },
+  "stage_status": {
+    "intake": {
+      "status": "complete",
+      "updated_at": "2026-08-12T17:10:00+00:00"
+    },
+    "research": {
+      "status": "complete",
+      "updated_at": "2026-08-12T18:20:00+00:00"
+    },
+    "synthesis": {
+      "status": "complete",
+      "updated_at": "2026-08-12T18:40:00+00:00"
+    },
+    "deck": {
+      "status": "complete",
+      "updated_at": "2026-08-13T16:20:00+00:00"
+    },
+    "narration": {
+      "status": "complete",
+      "updated_at": "2026-08-12T22:20:00+00:00"
+    },
+    "music": {
+      "status": "complete",
+      "updated_at": "2026-08-12T22:20:00+00:00"
+    },
+    "qa": {
+      "status": "complete",
+      "updated_at": "2026-08-13T11:05:00+00:00"
+    }
+  },
+  "research_passes": [
+    {
+      "pass": "A",
+      "label": "Landscape and baseline",
+      "mode": "Deep Research",
+      "started_at": "2026-08-12T17:14:00+00:00",
+      "status": "complete",
+      "fallback": null,
+      "completed_at": "2026-08-12T17:32:00+00:00",
+      "result_title": "Empirical Investigation of the AI Self-Acceleration Hypothesis: A Multi-Dimensional Analysis of Technical, Physical, and Economic Constraints",
+      "results_found": 70,
+      "cited": 54,
+      "uncited": 16,
+      "imported": "all (report + 70 results; notebook shows 71 sources)",
+      "omitted": 0,
+      "artifacts": [
+        "research/pass_A_report.md",
+        "research/pass_A_inventory.md"
+      ]
+    },
+    {
+      "pass": "B",
+      "label": "Adversarial / falsification (aimed at Pass A emerging skeptical thesis)",
+      "mode": "Deep Research",
+      "started_at": "2026-08-12T17:36:00+00:00",
+      "completed_at": "2026-08-12T17:52:00+00:00",
+      "status": "complete",
+      "result_title": "Automated Acceleration: An Empirical and Adversarial Audit of the Self-Reinforcing AI R&D Loop",
+      "results_found": 99,
+      "cited": 64,
+      "uncited": 35,
+      "imported": "all (notebook now shows 171 sources)",
+      "omitted": 0,
+      "fallback": null,
+      "artifacts": [
+        "research/pass_B_report.md",
+        "research/pass_B_inventory.md"
+      ]
+    },
+    {
+      "pass": "C",
+      "label": "Non-obvious leading indicators + labelled science-fiction framing lens",
+      "mode": "Deep Research",
+      "started_at": "2026-08-12T18:00:00+00:00",
+      "completed_at": "2026-08-12T18:14:00+00:00",
+      "status": "complete",
+      "result_title": "Quantitative Leading Indicators of Autonomous AI Self-Acceleration: A Pre-AGI Foresight Framework",
+      "results_found": 92,
+      "cited": 59,
+      "uncited": 33,
+      "imported": "all (notebook now shows 264 sources)",
+      "omitted": 0,
+      "fallback": null,
+      "artifacts": [
+        "research/pass_C_report.md",
+        "research/pass_C_inventory.md"
+      ]
+    },
+    {
+      "pass": "D",
+      "label": "Gap closure",
+      "status": "not_run",
+      "reason": "Remaining gaps are source-tracing gaps (retrieving already-identified primaries), not discovery gaps; disclosed in research_checkpoint.md and matrix caveats instead."
+    }
+  ],
+  "source_counts": {
+    "imported": 264,
+    "omitted": 0,
+    "downloaded": 0
+  },
+  "artifacts": {
+    "research_brief": "research_brief.md",
+    "pass_A_report": "research/pass_A_report.md",
+    "pass_A_inventory": "research/pass_A_inventory.md",
+    "pass_B_report": "research/pass_B_report.md",
+    "pass_B_inventory": "research/pass_B_inventory.md",
+    "source_registry": "source_registry.md",
+    "pass_C_report": "research/pass_C_report.md",
+    "pass_C_inventory": "research/pass_C_inventory.md",
+    "evidence_matrix": "evidence_matrix.md",
+    "research_checkpoint": "research_checkpoint.md",
+    "notebooklm_source": "notebooklm_source.md",
+    "slide_division": "slide_division.md",
+    "chart_data": [
+      "charts/task_horizon_doubling.csv",
+      "charts/reliability_gap.csv",
+      "charts/benchmark_vs_reality.csv",
+      "charts/forecast_disagreement.csv"
+    ],
+    "chart_renderer": "charts/render_charts.py",
+    "chart_images": "charts/out/",
+    "narration_script": "narration_script.md",
+    "deck_pptx": "singularity_clean.pptx",
+    "video_narrated_only": "singularity_narrated.mp4",
+    "video_final_present_bed": "singularity_final.mp4",
+    "video_final_subtle_bed": "singularity_final_soft.mp4",
+    "music_track": "music/lab_notes_drift.mp3",
+    "slides_native": "slides2_clean/",
+    "captures": "captures2/",
+    "qa_frames": "qa/"
+  },
+  "blockers": [
+    {
+      "date": "2026-08-12",
+      "item": "Independent evidence review ran in-session rather than as a fresh-context subagent, because this session forbids the Agent tool unless the user requests it. Disclosed in research_checkpoint.md."
+    }
+  ],
+  "deck": {
+    "notebook_artifact": "Singularity 2026 (2)",
+    "slides": 13,
+    "format": "Presenter Slides",
+    "length": "Default",
+    "sources_selected_at_generation": 2,
+    "source_isolation_verified": true,
+    "revisions": [
+      {
+        "slides": [
+          5,
+          13
+        ],
+        "reasons": [
+          "slide 13 invented an unsourced \">24h\" threshold; corrected to \"80%-bar horizons beyond a working day\" and \"Mandatory Sources\" -> \"Key sources\"",
+          "slide 5 title rendered in a serif face against the declared sans"
+        ],
+        "status": "slide 13 fixed by Revise; slide 5 title fix ignored by Revise and applied locally"
+      }
+    ],
+    "chart_slides_replaced_with_local_renders": [
+      4,
+      6,
+      7,
+      10
+    ],
+    "watermark": "inpainted locally on the 9 generated slides",
+    "visual_style": "Minimal editorial dark; bg #0B0E14, primary #D7DEE8, muted #6E7A8A, single accent #E8A33D (semantic: the one measured thing deciding the slide claim)",
+    "style_block_source": "slide_division.md Global visual direction, pasted verbatim into the generation prompt",
+    "restyle_run": "2026-08-13: slides regenerated against references/visual-style.md; slide content and narration unchanged",
+    "local_image_edits": [
+      {
+        "slide": 5,
+        "edit": "title band repainted in Segoe UI Light to match the deck sans; words, colour and position unchanged"
+      }
+    ]
+  },
+  "video": {
+    "duration_s": 992.3,
+    "resolution": "1920x1080",
+    "fps": 30,
+    "audio": "aac 48kHz mono",
+    "bed_measured_dB": {
+      "present": -18.9,
+      "subtle": -28.9
+    },
+    "speech_peak_dB": -3.2
+  },
+  "register_variants": {
+    "created": "2026-08-13",
+    "purpose": "three visual-register variants of the same report for side-by-side selection; no research re-run",
+    "held_constant": [
+      "13 slide titles and order",
+      "every Data field",
+      "source IDs per slide",
+      "the four DATA CHART slides: same CSVs, same numbers, same message, same accent semantics"
+    ],
+    "varied": [
+      "Global visual direction block",
+      "Visual paragraphs",
+      "chart palette (re-rendered per register so charts belong to their deck)"
+    ],
+    "variants": {
+      "paper": {
+        "spec": "slide_division_paper.md",
+        "deck": "Singularity Audit 2026",
+        "pptx": "singularity_paper.pptx",
+        "slides": "slides_paper_clean/",
+        "charts": "charts/out_paper/",
+        "palette": {
+          "bg": "#F4F1EA",
+          "ink": "#1B1B18",
+          "muted": "#6E6A62",
+          "accent": "#8C3A2B"
+        },
+        "pictures": 2,
+        "typography": 3,
+        "diagrams": 4,
+        "charts_n": 4,
+        "fixes": 1
+      },
+      "editorial": {
+        "spec": "slide_division_editorial.md",
+        "deck": "Singularity Calibration",
+        "pptx": "singularity_editorial.pptx",
+        "slides": "slides_editorial_clean/",
+        "charts": "charts/out_editorial/",
+        "palette": {
+          "bg": "#FAFAF8",
+          "ink": "#111214",
+          "muted": "#6F7378",
+          "accent": "#C0392B"
+        },
+        "pictures": 5,
+        "typography": 2,
+        "diagrams": 2,
+        "charts_n": 4,
+        "fixes": 5
+      },
+      "evocative": {
+        "spec": "slide_division_evocative.md",
+        "deck": "Singularity Calibrated",
+        "pptx": "singularity_evocative.pptx",
+        "slides": "slides_evocative_clean/",
+        "charts": "charts/out_evocative/",
+        "palette": {
+          "bg": "#07090C",
+          "ink": "#DCE3EA",
+          "muted": "#79838F",
+          "accent": "#E8A33D"
+        },
+        "pictures": 7,
+        "typography": 1,
+        "diagrams": 1,
+        "charts_n": 4,
+        "fixes": 8,
+        "showpiece_slide": 1
+      }
+    },
+    "source_isolation": "verified by screenshot before each of the three generations (only notebooklm_source.md + that variant ticked)",
+    "known_rule_conflict": "paper register: pictures capped at 0-15% (2 of 13) cannot also satisfy \"no three consecutive slides without a picture\"; best placement (slides 5 and 9) leaves runs of 4. Register ceiling was honoured; violation reported.",
+    "fact_gate": "fact_gate_variants.md",
+    "narration": "not rebuilt - audio is identical across variants; rebuild the video only after a winner is chosen"
+  },
+  "deck_regeneration_2026_08_13b": {
+    "trigger": "skill updated: references/visual-style.md replaced the wonder-from-the-real rule with \"The subject dictates the imagery\", and dropped the numeric variety floor",
+    "scope": "slide deck only - research artifacts frozen (brief, registry, evidence matrix, checkpoint, notebooklm_source.md untouched)",
+    "frozen": [
+      "13 slide titles and order",
+      "every Data field",
+      "per-slide source IDs",
+      "the four DATA CHART slides: same CSVs and the same rendered PNGs in charts/out_evocative/ reused unchanged"
+    ],
+    "rewritten": [
+      "Global visual direction block",
+      "all 13 Visual paragraphs"
+    ],
+    "register": "evocative",
+    "genre": "speculative documentary",
+    "palette": {
+      "bg": "#07090C",
+      "primary": "#DCE3EA",
+      "muted": "#79838F",
+      "accent": "#E8A33D"
+    },
+    "palette_note": "pinned to the existing charts/out_evocative palette so the rendered charts stay valid and unchanged",
+    "imagery_rule": "two picture kinds, REAL and IMAGINED; IMAGINED (glossy sci-fi singularity) permitted only as the tagged exhibit under discussion, never as decoration; in-image text limited to the tags IMAGINED / REAL / MEASURED",
+    "hype_vs_real_contrast": {
+      "slide_5": "true split frame, IMAGINED | REAL either side of a hard vertical edge",
+      "slide_9": "stacked halves, imagined below the FRAMING ONLY - NOT EVIDENCE rule",
+      "slide_1_and_12": "bookend - the dream opens the deck, the measured thing answers it"
+    },
+    "showpiece": "slide 1 (cold open)",
+    "categories": {
+      "pictures": [
+        1,
+        3,
+        5,
+        8,
+        9,
+        11,
+        12
+      ],
+      "diagram": [
+        2
+      ],
+      "charts": [
+        4,
+        6,
+        7,
+        10
+      ],
+      "typography": [
+        13
+      ]
+    },
+    "source_isolation": "verified by zoom before generating: only notebooklm_source.md + revised slide_division.md ticked; superseded slide-division source removed from the notebook",
+    "narration": "unchanged - narration_script.md and its 992.3s timing reused; TTS cache expected to hit",
+    "deck_artifact": "Singularity Audit 2026 (2)",
+    "revise_passes": 1,
+    "revise_fixes": [
+      {
+        "slide": 8,
+        "defect": "white background, breaking the identical-style rule",
+        "outcome": "fixed"
+      },
+      {
+        "slide": 9,
+        "defect": "FRAMING ONLY - NOT EVIDENCE banner sat above the measurable-indicators bullet, inverting its meaning",
+        "outcome": "fixed"
+      },
+      {
+        "slide": 13,
+        "defect": "[S49] Acemoglu listed twice",
+        "outcome": "source list fixed, but the pass garbled the left column into nonsense and dropped the methodology and provenance lines"
+      }
+    ],
+    "local_image_substitutions": [
+      {
+        "slides": [
+          4,
+          6,
+          7,
+          10
+        ],
+        "what": "DATA CHART renders reused unchanged from charts/out_evocative/"
+      },
+      {
+        "slide": 13,
+        "what": "rendered locally by charts/render_slide13.py in the deck palette, after the Revise pass garbled it; every string copied verbatim from the slide 13 Data field",
+        "reason": "avoided a third whole-deck regeneration that would have risked the twelve correct slides"
+      }
+    ],
+    "fact_gate": "all 13 slides audited at native resolution; every number matches notebooklm_source.md or its chart CSV; all nine IMAGINED/REAL/MEASURED tags verified by zoom",
+    "artifacts": {
+      "spec": "slide_division.md",
+      "slides": "slides_evo2_clean/",
+      "captures": "captures_evo2/",
+      "pptx": "singularity_clean.pptx",
+      "slide13_renderer": "charts/render_slide13.py"
+    },
+    "tag_convention": {
+      "status": "removed at user request 2026-08-13",
+      "was": "IMAGINED / REAL / MEASURED monospace tags rendered into 9 places across 7 slides",
+      "method": "local removal, not a Revise pass (a Revise regenerates the whole deck and had already destroyed slide 13 in this run)",
+      "technique": "7 tags replaced by patch clone from adjacent matching texture; 2 (slide 9 upper, slide 11) rebuilt with a bilinear fit of the surrounding ring plus matched noise, because they sit on gradients where cloning imported a neighbouring object",
+      "script": "charts/strip_tags.py",
+      "pristine_copy": "slides_evo2_clean_tagged/",
+      "spec_updated": "slide_division.md style block, Visual paragraphs, run notes and generation prompt no longer instruct any in-image text; REAL/IMAGINED retained only as the two picture-kind names",
+      "residual": "slide 9 upper and slide 11 show a faint soft rectangle on close inspection; no text and no imported objects"
+    }
+  }
+}
