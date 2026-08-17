@@ -103,6 +103,28 @@ def render_segment(a, text, key, out):
         asyncio.run(edge_tts_save(text, a.voice, a.rate, out))
 
 
+def srt_time(t):
+    ms = int(round(t * 1000))
+    return f"{ms//3600000:02d}:{ms//60000%60:02d}:{ms//1000%60:02d},{ms%1000:03d}"
+
+
+def slide_captions(text, start, dur_s):
+    """Sentence-level captions, timed proportionally to sentence length.
+
+    Proportional timing tracks real TTS pacing within a couple hundred ms —
+    good enough for slide narration; exact word timing would need forced
+    alignment, which this pipeline deliberately avoids.
+    """
+    sentences = [s for s in re.split(r"(?<=[.!?…])\s+", text.replace("\n", " ")) if s.strip()]
+    total = sum(len(s) for s in sentences) or 1
+    out, cursor = [], start
+    for s in sentences:
+        d = dur_s * len(s) / total
+        out.append((cursor, cursor + d, s.strip()))
+        cursor += d
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("script")
@@ -129,6 +151,9 @@ def main():
                     help="letterbox color behind non-16:9 slides")
     ap.add_argument("--samples", action="store_true",
                     help="write voice samples of slide 2 for --lang and exit (edge only)")
+    ap.add_argument("--no-srt", action="store_true",
+                    help="skip the sidecar .srt subtitle file (written next to out.mp4 "
+                         "by default; never burned into the video)")
     a = ap.parse_args()
 
     if a.lang not in LANG_VOICES and not a.voice:
@@ -177,13 +202,15 @@ def main():
                      "(raise the cap explicitly if the credits are available)")
 
     ff = ffmpeg()
-    segs = []
+    segs, captions, clock = [], [], 0.0
     for i, (text, png) in enumerate(zip(lines, slides), 1):
         mp3 = seg_path(i, text)
         if not os.path.exists(mp3):
             render_segment(a, text, key, mp3)
         d = dur(ff, mp3)
         total = a.lead + d + a.tail
+        captions += slide_captions(text, clock + a.lead, d)
+        clock += total
         seg = os.path.join(a.workdir, f"vseg_{i:02d}.mp4")
         cmd = [ff, "-y",
                "-loop", "1", "-framerate", "30", "-i", png,
@@ -209,6 +236,12 @@ def main():
     r = subprocess.run([ff, "-y", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", a.out],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-1500:]
+    if not a.no_srt:
+        srt = os.path.splitext(a.out)[0] + ".srt"
+        with open(srt, "w", encoding="utf-8") as f:
+            for n, (t0, t1, s) in enumerate(captions, 1):
+                f.write(f"{n}\n{srt_time(t0)} --> {srt_time(t1)}\n{s}\n\n")
+        print(f"subtitles: {srt} ({len(captions)} cues, sidecar — drop the file to drop them)")
     print(f"FINAL {a.out}: {dur(ff, a.out):.1f}s")
 
 

@@ -394,6 +394,11 @@ pixel edits.
   per-slide TTS, measured durations size each slide's screen time (sync correct
   by construction), 1080p, concat. Segments are cached by a hash of
   engine+voice+text, so editing one slide's narration re-renders only that slide.
+- Subtitles: a sidecar `out.srt` is written next to the video by default —
+  sentence-level cues timed proportionally within each slide's measured
+  narration. NEVER burned into the video: players auto-load the sidecar when
+  the filenames match, and deleting the .srt (or `--no-srt`) drops them.
+  Ship the .srt with the final deliverable unless the user declines.
 
 ### Non-English narration (Hebrew, Russian, German, Arabic, ...)
 
@@ -419,9 +424,30 @@ changes. Rules, learned the hard way on Hebrew runs:
   `python -m edge_tts --list-voices` and pass `--voice`. Arabic voices speak
   MSA — fine for narration; and Arabic shares Hebrew's vowel-ambiguity, so the
   same glossary + fluency-review rules apply, not extra tooling.
-- RTL caveat: narration-only RTL is safe. If the user wants the SLIDES
-  themselves in an RTL language, treat NotebookLM's RTL text rendering as
-  unverified — render one test slide and inspect before committing to it.
+### Non-English SLIDES (opt-in, stricter audit)
+
+Default remains English slides + native-language narration. When the user
+wants the slides themselves in another NotebookLM-supported language:
+
+- Author `notebooklm_source.md` and `slide_division.md` in that language
+  (same native-writing + strong-writer + fluency-review rules as narration),
+  and state the output language explicitly in the generation prompt.
+- **The Fact Gate audit changes character.** In English the audit hunts
+  numbers and garbled image text; in languages like Hebrew the generator makes
+  far bigger language mistakes. The slide-review pass must additionally, on
+  EVERY slide, with a strong model reading natively:
+  - read every word aloud in your head — hunt invented/malformed words and
+    machine-translationese, not just wrong numbers;
+  - check RTL direction handling: punctuation jumping to the wrong end of a
+    line, mixed Hebrew/Latin tokens reversed or split, numbers rendered in
+    the wrong visual order;
+  - check that text INSIDE generated images is either absent or correct —
+    generators garble non-Latin scripts far more often than English;
+  - budget for more Revise iterations than an English deck (state corrected
+    text verbatim in the Revise instruction, in the target language).
+- Render one test slide and inspect it BEFORE generating the full deck —
+  if RTL rendering is broken at the layout level, fall back to English slides
+  + native narration rather than fighting the generator.
 
 ### ElevenLabs engine (premium voices)
 
